@@ -2,8 +2,8 @@ package com.revature.fff.ui;
 
 import org.jetbrains.annotations.NotNull;
 
-public abstract class Component {
-    Rectangle bounds;
+public abstract class Component implements IAction {
+    protected Rectangle bounds;
 
     Component(int t, int l, int h, int w) {
         bounds = new Rectangle().setOrigin(t, l).setSize(h, w);
@@ -13,6 +13,9 @@ public abstract class Component {
         this.bounds = bounds.clone();
     }
 
+    public void setBounds(Rectangle bounds) {
+        this.bounds = bounds.clone();
+    }
     public void setTop(int top) {
         bounds.setTop(top);
     }

@@ -64,7 +64,12 @@ public class MenuItem extends Component {
         String idx = "" + (index + 1);
         con.setPosition(getTop(), getLeft() - idx.length() - 1);
         con.print(idx);
-        con.print(" ");
+        con.print(active ? "_" : " ");
         con.print(text);
+    }
+
+    @Override
+    public void process(String command) {
+        action.execute();
     }
 }

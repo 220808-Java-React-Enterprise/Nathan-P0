@@ -12,8 +12,8 @@ public class User extends DBModel {
     private ForeignKey<Transaction> cart = new ForeignKey<>(Transaction.class);
     private Role role;
 
-    {
-        Database.register(getClass(), new UserDAO());
+    static {
+        Database.register(User.class, new UserDAO());
     }
 
     public User(String id, String username, String password, String cart_id, Role role) {

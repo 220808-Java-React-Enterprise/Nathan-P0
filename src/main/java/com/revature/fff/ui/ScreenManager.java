@@ -7,9 +7,19 @@ public class ScreenManager implements Runnable {
     @Override
     public void run() {
         while (current != null) {
+            console.clear();
             current.draw();
             console.flush();
-            console.readLine();
+            String input = console.readLine();
+            if (input.length() > 0 && input.charAt(0) == ':') {
+                if (input.length() > 1) {
+                    char c = input.charAt(1);
+                    if (c == '.') current.processInput("");
+                    else if (c == '>') current.nextComp();
+                    else if (c == '<') current.prevComp();
+                }
+            }
+            else current.processInput(input);
         }
     }
 

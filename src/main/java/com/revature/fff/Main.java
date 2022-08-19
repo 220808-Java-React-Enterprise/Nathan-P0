@@ -12,18 +12,20 @@ import java.sql.SQLException;
 public class Main {
     public static void main(String[] args) {
         Console.initConsole(25, 80);
-        try {
-            Database.getConnection();
-            User user = new User(null, "auser", "passw0rd", null, null);
-            UserDAO ud = new UserDAO();
-            ud.put(user);
-            System.out.println(ud.getByUsernameAndPassword("auser", "passw0rd"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-//        ScreenManager sm = new ScreenManager();
-//        sm.setScreen(new MGuest());
-//        sm.run();
+//        try {
+//            Database.getConnection();
+//            User user = new User(null, "auser", "passw0rd", null, null);
+//            UserDAO ud = new UserDAO();
+//            Database.getConnection().setAutoCommit(false);
+//            ud.put(user);
+//            System.out.println(ud.getByUsernameAndPassword("auser", "passw0rd"));
+//            Database.getConnection().commit();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+        ScreenManager sm = new ScreenManager();
+        sm.setScreen(new MGuest(sm));
+        sm.run();
 //        Random r = new Random();
 //        for (int x = 0; x < 10; x++) {
 //            c.clear();
