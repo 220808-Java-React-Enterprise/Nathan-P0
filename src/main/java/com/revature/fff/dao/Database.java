@@ -14,12 +14,12 @@ public class Database {
     private static Database instance;
     private Connection conn;
     private final Properties props = new Properties();
-    static HashMap<Class<? extends DBModel>, IDAO<? extends DBModel>> daos = new HashMap<>();
-    public static void register(Class<? extends DBModel> c, IDAO<? extends DBModel> d) {
+    static HashMap<Class<? extends DBModel>, DAO<? extends DBModel>> daos = new HashMap<>();
+    public static void register(Class<? extends DBModel> c, DAO<? extends DBModel> d) {
         daos.put(c,d);
     }
 
-    public static IDAO<? extends DBModel> getForType(Class<? extends DBModel> c) {
+    public static DAO<? extends DBModel> getForType(Class<? extends DBModel> c) {
         return daos.get(c);
     }
 

@@ -1,21 +1,24 @@
 package com.revature.fff.models;
 
 import com.revature.fff.dao.Database;
+import com.revature.fff.dao.ImageDAO;
+
+import java.util.UUID;
 
 public class Image extends DBModel {
-    private String id;
+    private UUID id;
     private String data;
 
     static {
-        //Database.register(Image.class, new ImageDAO());
+        Database.register(Image.class, ImageDAO.getInstance());
     }
 
-    public Image(String id, String data) {
+    public Image(UUID id, String data) {
         this.id = id;
         this.data = data;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 

@@ -1,24 +1,27 @@
 package com.revature.fff.models;
 
+import com.revature.fff.dao.CategoryDAO;
 import com.revature.fff.dao.Database;
 import com.revature.fff.dao.ForeignKey;
 
+import java.util.UUID;
+
 public class Category extends DBModel {
-    String id;
+    UUID id;
     String name;
     ForeignKey<Image> image = new ForeignKey<>(Image.class);
 
     static  {
-        //Database.register(Category.class, new CategoryDAO());
+        Database.register(Category.class, CategoryDAO.getInstance());
     }
 
-    public Category(String id, String name, ForeignKey<Image> image) {
+    public Category(UUID id, String name, UUID image_id) {
         this.id = id;
         this.name = name;
-        this.image = image;
+        this.image.setKey(image_id);
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 

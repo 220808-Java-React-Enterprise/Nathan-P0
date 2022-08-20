@@ -1,11 +1,14 @@
 package com.revature.fff.services;
 
-import com.revature.fff.dao.Database;
 import com.revature.fff.dao.UserDAO;
 import com.revature.fff.models.User;
+import org.postgresql.util.PSQLException;
+
+import java.sql.SQLException;
 
 public class UserService {
     private static User activeUser;
+    private static UserDAO dao = UserDAO.getInstance();
     public static void checkUsername(String username) throws InvalidInput {
         if (username.length() < 4) throw new InvalidInput("Username must be at least 4 characters.");
         if (username.length() > 20) throw new InvalidInput("Username must be at most 20 characters.");
@@ -22,13 +25,17 @@ public class UserService {
 
     public static void signup(String username, String password) {
         User user = new User(null, username, password, null, null);
-        UserDAO ud = new UserDAO();
-        ud.put(user);
+        try {
+            dao.put(user);
+        } catch (SQLException e) {
+            if (e.getSQLState().equals("23505"))
+                throw new InvalidInput("That username has already been taken. Please choose another.");
+            throw new RuntimeException(e);
+        }
     }
 
     public static void login(String username, String password) {
-        UserDAO ud = new UserDAO();
-        activeUser = ud.getByUsernameAndPassword(username, password);
+        activeUser = dao.getByUsernameAndPassword(username, password);
         if (activeUser == null) throw new InvalidInput("A user with the given credentials could not be found.");
     }
 

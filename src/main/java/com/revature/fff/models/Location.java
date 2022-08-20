@@ -2,22 +2,24 @@ package com.revature.fff.models;
 
 import com.revature.fff.dao.Database;
 import com.revature.fff.dao.ForeignKey;
-import com.revature.fff.dao.UserDAO;
+import com.revature.fff.dao.LocationDAO;
+
+import java.util.UUID;
 
 public class Location extends DBModel {
-    private String id;
+    private UUID id;
     private short number;
     private String address;
     private String city;
     private String state;
-    private short zip;
+    private String zip;
     private ForeignKey<User> manager = new ForeignKey<>(User.class);
 
     static {
-        //Database.register(Location.class, new LocationDAO());
+        Database.register(Location.class, LocationDAO.getInstance());
     }
 
-    public Location(String id, short number, String address, String city, String state, short zip, String manager_id) {
+    public Location(UUID id, short number, String address, String city, String state, String zip, UUID manager_id) {
         this.id = id;
         this.number = number;
         this.address = address;
@@ -27,7 +29,7 @@ public class Location extends DBModel {
         this.manager.setKey(manager_id);
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -47,7 +49,7 @@ public class Location extends DBModel {
         return state;
     }
 
-    public short getZip() {
+    public String getZip() {
         return zip;
     }
 

@@ -1,8 +1,5 @@
 package com.revature.fff.ui;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import java.util.Stack;
 
