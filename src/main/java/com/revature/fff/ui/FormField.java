@@ -70,7 +70,8 @@ public class FormField extends Component {
         }
         else {
             try {
-                validator.process(command);
+                if (validator != null)
+                    validator.process(command);
                 setText(command);
                 parent.nextComp();
                 parent.setStatus("");

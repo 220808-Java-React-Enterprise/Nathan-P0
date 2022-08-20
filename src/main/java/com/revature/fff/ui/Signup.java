@@ -1,5 +1,6 @@
 package com.revature.fff.ui;
 
+import com.revature.fff.services.InvalidInput;
 import com.revature.fff.services.UserService;
 
 public class Signup extends Screen {
@@ -20,7 +21,13 @@ public class Signup extends Screen {
         password.setPosition(4, 1);
         form.add(password);
         submit = new Button(this, "Sign Up", (s) -> {
-            UserService.signup(username.getText(), password.getText());
+            try {
+                UserService.signup(username.getText(), password.getText());
+                sm.setScreen(new Login(sm));
+            }
+            catch(InvalidInput e) {
+                setStatus(e.getMessage());
+            }
         });
         submit.setPosition(7, 1);
         form.add(submit);
@@ -30,34 +37,5 @@ public class Signup extends Screen {
         form.setPosition(top, left);
         components.add(form);
         addFocusable(username).addFocusable(password).addFocusable(submit);
-    }
-
-    @Override
-    protected void layout() {
-//        super.layout();
-//        int width = 0;
-//        int height = 0;
-//        for (Component c : components) {
-//            width = Math.max(width, c.getWidth());
-//            c.bounds.move(height, c.getLeft());
-//            height = height + 1 + c.getHeight();
-//        }
-//        height--;
-//        Rectangle bounds = Console.getInstance().getMargins();
-//        int left = (bounds.getWidth() - width) / 2;
-//        Rectangle inner = new Rectangle();
-//        inner.setOrigin(5, left);
-//        inner.setSize(height, width);
-//        Console.getInstance().setMargins(inner, 0);
-    }
-
-    @Override
-    public void preDraw() {
-//        layout();
-    }
-
-    @Override
-    public void postDraw() {
-//        Console.getInstance().restoreMargins();
     }
 }

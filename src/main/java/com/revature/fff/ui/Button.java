@@ -1,5 +1,7 @@
 package com.revature.fff.ui;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Button extends Label {
 
     Screen parent;
@@ -9,6 +11,12 @@ public class Button extends Label {
         super(text);
         parent = s;
         this.action = action;
+        setWidth(getWidth() + 2);
+    }
+
+    public void draw(@NotNull Console c) {
+        c.setPosition(getTop(), getLeft());
+        c.print((active ? "<" : " ") + text + (active ? ">" : " "));
     }
 
     @Override
