@@ -12,6 +12,7 @@ public class Menu extends Screen {
     public Menu addItem(MenuItem item) {
         components.add(item);
         items.add(item);
+        focusable.add(item);
         return this;
     }
 

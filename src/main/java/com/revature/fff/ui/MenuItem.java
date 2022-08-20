@@ -60,7 +60,7 @@ public class MenuItem extends Component {
     }
 
     @Override
-    public void draw(@NotNull Console con, boolean active) {
+    public void draw(@NotNull Console con) {
         String idx = "" + (index + 1);
         con.setPosition(getTop(), getLeft() - idx.length() - 1);
         con.print(idx);

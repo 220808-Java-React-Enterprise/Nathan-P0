@@ -1,12 +1,13 @@
 package com.revature.fff.ui;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import java.util.Stack;
 
 public class Console {
-    private byte[][] screen;
+    private char[][] screen;
     private byte[][] attrib;
     private byte[][] colors;
     private int row, col, height, width;
@@ -37,7 +38,7 @@ public class Console {
         height = h - 1;
         width = w;
         row = col = 0;
-        screen = new byte[height][width];
+        screen = new char[height][width];
         attrib = new byte[height][width];
         colors = new byte[height][width];
         resetMargins();
@@ -53,9 +54,24 @@ public class Console {
         col = c + mLeft;
     }
 
+    public void setRow(int r) {
+        row = r + mTop;
+    }
+
+    public void setCol(int c) {
+        col = c + mLeft;
+    }
+
     //region Margins
     public void setMargins(Rectangle bounds, int cr) {
         setMargins(bounds.getTop(), bounds.getLeft(), bounds.getBottom(), bounds.getRight(), cr);
+    }
+
+    public void setMarginsRelative(Rectangle bounds) {
+        Rectangle r = bounds.clone();
+        r.move(r.getTop() + mTop, r.getLeft() + mLeft);
+        r.intersect(margins.peek());
+        setMargins(r.getTop(), r.getLeft(), r.getBottom(), r.getRight(), mCR - margins.peek().getLeft());
     }
 
     public void setMargins(int t, int l, int b, int r, int cr) {
@@ -117,7 +133,7 @@ public class Console {
                 col = mCR;
             } else {
                 if (row >= mTop && col >= mLeft && col <= mRight) {
-                    screen[row][col] = (byte) c;
+                    screen[row][col] = (char) c;
                     attrib[row][col] = curAttrib;
                     colors[row][col] = (byte) ((fg << 4) | (bg & 0xF));
                 }
@@ -139,14 +155,10 @@ public class Console {
     public void flush() {
         System.out.println();
         System.out.print("\u001B[;H");
-        for (byte[] line : screen) {
+        for (char[] line : screen) {
 //            String s = new String(line);
-            try {
-                System.out.write(line);
+            System.out.print(line);
 //                System.out.write(s.getBytes(StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
             System.out.println();
         }
         System.out.print(" > ");

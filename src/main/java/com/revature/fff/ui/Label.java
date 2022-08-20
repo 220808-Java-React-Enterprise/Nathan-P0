@@ -15,9 +15,9 @@ public class Label extends Component {
     }
 
     @Override
-    public void draw(@NotNull Console c, boolean active) {
+    public void draw(@NotNull Console c) {
         c.setPosition(getTop(), getLeft());
-        c.print((active ? "<" : "") + text + (active ? ">" : ""));
+        c.print((active ? "<" : " ") + text + (active ? ">" : " "));
     }
 
     @Override

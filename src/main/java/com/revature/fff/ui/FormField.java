@@ -3,39 +3,39 @@ package com.revature.fff.ui;
 import com.revature.fff.services.InvalidInput;
 import org.jetbrains.annotations.NotNull;
 
-public class FField extends Component {
+public class FormField extends Component {
     String text;
     int maxSize;
     String label;
     Screen parent;
     IAction validator;
 
-    public FField(Screen s) {
+    public FormField(Screen s) {
         super(0, 0, 2, 2);
         text = "";
         label = "";
         parent = s;
     }
 
-    public FField(Screen s, String label) {
+    public FormField(Screen s, String label) {
         super(0, 0, 2, label.length() + 2);
         text = "";
         this.label = label;
         parent = s;
     }
 
-    public FField setMax(int max) {
+    public FormField setMax(int max) {
         maxSize = max;
+        if (max + 2 > getWidth()) setWidth(max + 2);
         return this;
     }
 
-    public FField setText(String text) {
+    public FormField setText(String text) {
         this.text = text;
-        if (text.length() > label.length()) setWidth(text.length() + 2);
         return this;
     }
 
-    public FField setValidator(IAction v) {
+    public FormField setValidator(IAction v) {
         validator = v;
         return this;
     }
@@ -45,15 +45,18 @@ public class FField extends Component {
     }
 
     @Override
-    public void draw(@NotNull Console c, boolean active) {
-        char[] temp = new char[getWidth()];
-        for (int i = 0; i < temp.length; i++) {
-            temp[i] = ' ';
+    public void draw(@NotNull Console c) {
+        char[] temp = new char[maxSize + 2];
+        for (int i = 1; i < temp.length - 1; i++) {
+            temp[i] = '_';
         }
         System.arraycopy(text.toCharArray(), 0, temp, 1, text.length());
         if (active) {
             temp[0] = '<';
             temp[temp.length-1] = '>';
+        }
+        else {
+            temp[0] = temp[temp.length-1] = ' ';
         }
         c.setPosition(getTop(), getLeft());
         c.print(new String(temp));

@@ -4,41 +4,64 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class Component implements IAction {
     protected Rectangle bounds;
+    protected boolean active;
+
+    Component() {
+        bounds = new Rectangle();
+    }
 
     Component(int t, int l, int h, int w) {
         bounds = new Rectangle().setOrigin(t, l).setSize(h, w);
     }
 
     Component(@NotNull Rectangle bounds) {
-        this.bounds = bounds.clone();
+        setBounds(bounds);
     }
 
-    public void setBounds(Rectangle bounds) {
+    public Component setBounds(Rectangle bounds) {
         this.bounds = bounds.clone();
+        return this;
     }
-    public void setTop(int top) {
+
+    public Component setPosition(int top, int left) {
+        bounds.move(top, left);
+        return this;
+    }
+
+    public Component setSize(int height, int width) {
+        bounds.setSize(height, width);
+        return this;
+    }
+
+    public Component setTop(int top) {
         bounds.setTop(top);
+        return this;
     }
 
-    public void setLeft(int left) {
+    public Component setLeft(int left) {
         bounds.setLeft(left);
+        return this;
     }
 
-    public void setHeight(int height) {
+    public Component setHeight(int height) {
         bounds.setHeight(height);
+        return this;
     }
 
-    public void setWidth(int width) {
+    public Component setWidth(int width) {
         bounds.setWidth(width);
+        return this;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public int getTop() {
         return bounds.getTop();
     }
 
-    public int getLeft() {
-        return bounds.getLeft();
-    }
+    public int getLeft() { return bounds.getLeft(); }
 
     public int getHeight() {
         return bounds.getHeight();
@@ -48,5 +71,5 @@ public abstract class Component implements IAction {
         return bounds.getWidth();
     }
 
-    public abstract void draw(@NotNull Console c, boolean active);
+    public abstract void draw(@NotNull Console c);
 }
