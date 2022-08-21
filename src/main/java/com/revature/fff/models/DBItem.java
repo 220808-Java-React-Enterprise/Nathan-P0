@@ -8,21 +8,21 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.UUID;
 
-public class Item extends DBModel {
+public class DBItem extends DBModel {
     UUID id;
     String name;
     String desc;
-    ForeignKey<Image> image = new ForeignKey<>(Image.class);
+    ForeignKey<DBImage> image = new ForeignKey<>(DBImage.class);
     int price;
-    ForeignKey<Category> category = new ForeignKey<>(Category.class);
+    ForeignKey<DBCategory> category = new ForeignKey<>(DBCategory.class);
     static final Locale locale = new Locale("en", "US");
     static final NumberFormat nf = NumberFormat.getInstance(locale);
 
     static {
-        Database.register(Item.class, ItemDAO.getInstance());
+        Database.register(DBItem.class, ItemDAO.getInstance());
     }
 
-    public Item(UUID id, String name, String desc, UUID image_id, int price, UUID category_id) {
+    public DBItem(UUID id, String name, String desc, UUID image_id, int price, UUID category_id) {
         this.id = id;
         this.name = name;
         this.desc = desc;
@@ -43,15 +43,17 @@ public class Item extends DBModel {
         return desc;
     }
 
-    public ForeignKey<Image> getImage() {
+    public ForeignKey<DBImage> getImage() {
         return image;
     }
 
     public int getPrice() {
         return price;
     }
+    
+    public String getDisplayPrice() { return "$" + nf.format(price / 100); }
 
-    public ForeignKey<Category> getCategory() {
+    public ForeignKey<DBCategory> getCategory() {
         return category;
     }
 
@@ -62,7 +64,7 @@ public class Item extends DBModel {
                        ", name='" + name + '\'' +
                        ", desc='" + desc + '\'' +
                        ", image=" + image +
-                       ", price=" + nf.format(price / 100) +
+                       ", price=" + getDisplayPrice() +
                        ", category=" + category +
                        '}';
     }

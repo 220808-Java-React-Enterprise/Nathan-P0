@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class Component implements IAction {
     protected Rectangle bounds;
     protected boolean active;
+    protected Object extra;
 
     Component() {
         bounds = new Rectangle();
@@ -50,6 +51,11 @@ public abstract class Component implements IAction {
 
     public Component setWidth(int width) {
         bounds.setWidth(width);
+        return this;
+    }
+
+    public Component setExtra(Object extra) {
+        this.extra = extra;
         return this;
     }
 

@@ -1,13 +1,12 @@
 package com.revature.fff.services;
 
 import com.revature.fff.dao.UserDAO;
-import com.revature.fff.models.User;
-import org.postgresql.util.PSQLException;
+import com.revature.fff.models.DBUser;
 
 import java.sql.SQLException;
 
 public class UserService {
-    private static User activeUser;
+    private static DBUser activeUser;
     private static UserDAO dao = UserDAO.getInstance();
     public static void checkUsername(String username) throws InvalidInput {
         if (username.length() < 4) throw new InvalidInput("Username must be at least 4 characters.");
@@ -24,7 +23,7 @@ public class UserService {
     }
 
     public static void signup(String username, String password) {
-        User user = new User(null, username, password, null, null);
+        DBUser user = new DBUser(null, username, password, null, null);
         try {
             dao.put(user);
         } catch (SQLException e) {
@@ -39,7 +38,7 @@ public class UserService {
         if (activeUser == null) throw new InvalidInput("A user with the given credentials could not be found.");
     }
 
-    public static User getActiveUser() {
+    public static DBUser getActiveUser() {
         return activeUser;
     }
 }

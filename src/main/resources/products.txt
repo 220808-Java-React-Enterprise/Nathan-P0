@@ -1,0 +1,4 @@
+:Chair 1:A Chair:empty:10000:Chairs
+:Chair 2:Another Chair:empty:20000:Chairs
+:Chair 3:A Stool:empty:5000:Chairs
+:Chair 4:A Couch and Loveseat Set:empty:100000:Chairs

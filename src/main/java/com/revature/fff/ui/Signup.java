@@ -20,7 +20,7 @@ public class Signup extends Screen {
         });
         password.setPosition(4, 1);
         form.add(password);
-        submit = new Button(this, "Sign Up", (s) -> {
+        submit = new Button(this, "Sign Up", () -> {
             try {
                 UserService.signup(username.getText(), password.getText());
                 sm.setScreen(new Login(sm));

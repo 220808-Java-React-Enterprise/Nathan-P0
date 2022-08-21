@@ -5,15 +5,15 @@ import com.revature.fff.dao.ImageDAO;
 
 import java.util.UUID;
 
-public class Image extends DBModel {
+public class DBImage extends DBModel {
     private UUID id;
     private String data;
 
     static {
-        Database.register(Image.class, ImageDAO.getInstance());
+        Database.register(DBImage.class, ImageDAO.getInstance());
     }
 
-    public Image(UUID id, String data) {
+    public DBImage(UUID id, String data) {
         this.id = id;
         this.data = data;
     }

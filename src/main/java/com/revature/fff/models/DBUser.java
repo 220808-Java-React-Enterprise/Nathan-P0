@@ -6,19 +6,19 @@ import com.revature.fff.dao.UserDAO;
 
 import java.util.UUID;
 
-public class User extends DBModel {
+public class DBUser extends DBModel {
     private UUID id;
     private String username;
     private String password;
     //FK Transaction.id
-    private ForeignKey<Transaction> cart = new ForeignKey<>(Transaction.class);
+    private ForeignKey<DBTransaction> cart = new ForeignKey<>(DBTransaction.class);
     private Role role;
 
     static {
-        Database.register(User.class, UserDAO.getInstance());
+        Database.register(DBUser.class, UserDAO.getInstance());
     }
 
-    public User(UUID id, String username, String password, UUID cart_id, Role role) {
+    public DBUser(UUID id, String username, String password, UUID cart_id, Role role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -38,7 +38,7 @@ public class User extends DBModel {
         return password;
     }
 
-    public ForeignKey<Transaction> getCart() {
+    public ForeignKey<DBTransaction> getCart() {
         return cart;
     }
 

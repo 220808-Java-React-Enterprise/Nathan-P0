@@ -42,7 +42,7 @@ public class Frame extends Container {
             c.setPosition(0, 1);
             c.print(title.substring(0, Math.min(title.length(), w - 2)));
         }
-        c.resetMargins();
+        c.restoreMargins();
     }
 
     @Override

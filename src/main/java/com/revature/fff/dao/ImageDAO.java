@@ -1,12 +1,11 @@
 package com.revature.fff.dao;
 
-import com.revature.fff.models.Image;
-import com.revature.fff.models.Location;
+import com.revature.fff.models.DBImage;
 
 import java.sql.*;
 import java.util.UUID;
 
-public class ImageDAO extends DAO<Image> {
+public class ImageDAO extends DAO<DBImage> {
     private static ImageDAO instance;
     private PreparedStatement insert;
     private PreparedStatement select;
@@ -28,7 +27,7 @@ public class ImageDAO extends DAO<Image> {
     }
 
     @Override
-    public UUID put(Image image) throws SQLException {
+    public UUID put(DBImage image) throws SQLException {
         insert.setString(1, image.getData());
         insert.executeUpdate();
         try (ResultSet rs = insert.getGeneratedKeys()) {
@@ -37,13 +36,13 @@ public class ImageDAO extends DAO<Image> {
     }
 
     @Override
-    public Image getCurrent(UUID id) {
+    public DBImage getCurrent(UUID id) {
         try {
             select.setObject(1, id);
             try (ResultSet rs = select.executeQuery()) {
                 return rs.next() ?
-                               new Image((UUID) rs.getObject("id"),
-                                                rs.getString("data")) :
+                               new DBImage((UUID) rs.getObject("id"),
+                                           rs.getString("data")) :
                                null;
             }
         } catch (SQLException e) {

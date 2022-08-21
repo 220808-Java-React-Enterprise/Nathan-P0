@@ -1,12 +1,11 @@
 package com.revature.fff.dao;
 
-import com.revature.fff.models.Inventory;
-import com.revature.fff.models.TransEntry;
+import com.revature.fff.models.DBTransEntry;
 
 import java.sql.*;
 import java.util.UUID;
 
-public class TransEntryDAO extends DAO<TransEntry> {
+public class TransEntryDAO extends DAO<DBTransEntry> {
     private static TransEntryDAO instance;
     private PreparedStatement insert;
     private PreparedStatement select;
@@ -28,9 +27,9 @@ public class TransEntryDAO extends DAO<TransEntry> {
     }
 
     @Override
-    public UUID put(TransEntry transEntry) throws SQLException {
-        insert.setObject(1, transEntry.getTransaction().get());
-        insert.setObject(2, transEntry.getItem().get());
+    public UUID put(DBTransEntry transEntry) throws SQLException {
+        insert.setObject(1, transEntry.getTransaction().getKey());
+        insert.setObject(2, transEntry.getItem().getKey());
         insert.setInt(3, transEntry.getPrice());
         insert.executeUpdate();
         try (ResultSet rs = insert.getGeneratedKeys()) {
@@ -39,15 +38,15 @@ public class TransEntryDAO extends DAO<TransEntry> {
     }
 
     @Override
-    public TransEntry getCurrent(UUID id) {
+    public DBTransEntry getCurrent(UUID id) {
         try {
             select.setObject(1, id);
             try (ResultSet rs = select.executeQuery()) {
                 return rs.next() ?
-                               new TransEntry((UUID) rs.getObject("id"),
-                                              (UUID) rs.getObject("transaction"),
-                                              (UUID) rs.getObject("item"),
-                                                     rs.getInt("price")) :
+                               new DBTransEntry((UUID) rs.getObject("id"),
+                                                (UUID) rs.getObject("transaction"),
+                                                (UUID) rs.getObject("item"),
+                                                rs.getInt("price")) :
                                null;
             }
         } catch (SQLException e) {

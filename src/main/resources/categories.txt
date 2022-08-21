@@ -1,0 +1,4 @@
+:Chairs:chairthumb
+:Tables:tablethumb
+:Bookshelves:bookthumb
+:Dressers:dresserthumb

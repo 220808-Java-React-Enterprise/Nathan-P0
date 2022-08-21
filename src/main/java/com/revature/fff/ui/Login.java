@@ -20,7 +20,7 @@ public class Login extends Screen {
         });
         password.setPosition(4, 1);
         form.add(password);
-        Button submit = new Button(this, "Login", (s) -> {
+        Button submit = new Button(this, "Login", () -> {
             try {
                 UserService.login(username.getText(), password.getText());
                 sm.setScreen(new MainMenu(sm));
@@ -39,7 +39,7 @@ public class Login extends Screen {
         Label noacc = (Label) new Label("No account?");
         noacc.setPosition(form.getTop() + form.getHeight(), form.getLeft() + 1);
         components.add(noacc);
-        Button signup = new Button(this, "Sign Up", (s) -> sm.setScreen(new Signup(sm)));
+        Button signup = new Button(this, "Sign Up", () -> sm.setScreen(new Signup(sm)));
         signup.setPosition(noacc.getTop(), noacc.getWidth() + 1 + noacc.getLeft());
         components.add(signup);
         addFocusable(username).addFocusable(password).addFocusable(submit).addFocusable(signup);

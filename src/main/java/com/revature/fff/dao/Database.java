@@ -55,4 +55,21 @@ public class Database {
     public static Connection getConnection() throws SQLException {
         return getInstance().getConnection0();
     }
+    
+    public static void startTransaction() {
+        try {
+            getConnection().setAutoCommit(false);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public static void endTransaction() {
+        try {
+            getConnection().commit();
+            getConnection().setAutoCommit(true);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

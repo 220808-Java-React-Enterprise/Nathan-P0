@@ -5,9 +5,9 @@ import org.jetbrains.annotations.NotNull;
 public class Button extends Label {
 
     Screen parent;
-    IAction action;
+    IButton action;
 
-    public Button(Screen s, String text, IAction action) {
+    public Button(Screen s, String text, IButton action) {
         super(text);
         parent = s;
         this.action = action;
@@ -21,6 +21,6 @@ public class Button extends Label {
 
     @Override
     public void process(String command) {
-        action.process(command);
+        action.execute();
     }
 }

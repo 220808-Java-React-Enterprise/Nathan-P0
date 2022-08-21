@@ -1,13 +1,11 @@
 package com.revature.fff.dao;
 
-import com.revature.fff.models.Location;
-import com.revature.fff.models.Role;
-import com.revature.fff.models.User;
+import com.revature.fff.models.DBLocation;
 
 import java.sql.*;
 import java.util.UUID;
 
-public class LocationDAO extends DAO<Location> {
+public class LocationDAO extends DAO<DBLocation> {
     private static LocationDAO instance;
     private PreparedStatement insert;
     private PreparedStatement select;
@@ -28,31 +26,31 @@ public class LocationDAO extends DAO<Location> {
         return instance;
     }
 
-    public UUID put(Location location) throws SQLException {
+    public UUID put(DBLocation location) throws SQLException {
         insert.setShort(1, location.getNumber());
         insert.setString(2, location.getAddress());
         insert.setString(3, location.getCity());
         insert.setString(4, location.getState());
         insert.setString(5, location.getZip());
-        insert.setObject(6, location.getManager().get());
+        insert.setObject(6, location.getManager().getKey());
         insert.executeUpdate();
         try (ResultSet rs = insert.getGeneratedKeys()) {
             return rs.next() ? (UUID) rs.getObject("id") : null;
         }
     }
 
-    public Location getCurrent(UUID id) {
+    public DBLocation getCurrent(UUID id) {
         try {
             select.setObject(1, id);
             try (ResultSet rs = select.executeQuery()) {
                 return rs.next() ?
-                               new Location((UUID) rs.getObject("id"),
-                                                   rs.getShort("number"),
-                                                   rs.getString("address"),
-                                                   rs.getString("city"),
-                                                   rs.getString("state"),
-                                                   rs.getString("zip"),
-                                            (UUID) rs.getObject("manager")) :
+                               new DBLocation((UUID) rs.getObject("id"),
+                                              rs.getShort("number"),
+                                              rs.getString("address"),
+                                              rs.getString("city"),
+                                              rs.getString("state"),
+                                              rs.getString("zip"),
+                                              (UUID) rs.getObject("manager")) :
                                null;
             }
         } catch (SQLException e) {

@@ -127,7 +127,7 @@ public class Console {
             if (row > mBottom) return;
             if (c == '\n') {
                 row++;
-                col = mCR;
+                col = mLeft;
             } else {
                 if (row >= mTop && col >= mLeft && col <= mRight) {
                     screen[row][col] = (char) c;

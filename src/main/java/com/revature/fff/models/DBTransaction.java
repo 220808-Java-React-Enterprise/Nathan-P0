@@ -7,18 +7,18 @@ import com.revature.fff.dao.TransactionDAO;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-public class Transaction extends DBModel {
+public class DBTransaction extends DBModel {
     private UUID id;
-    private ForeignKey<User> customer = new ForeignKey<>(User.class);
-    private ForeignKey<Location> location = new ForeignKey<>(Location.class);
+    private ForeignKey<DBUser> customer = new ForeignKey<>(DBUser.class);
+    private ForeignKey<DBLocation> location = new ForeignKey<>(DBLocation.class);
     private boolean cart;
     private Timestamp modified;
 
     static {
-        Database.register(Transaction.class, TransactionDAO.getInstance());
+        Database.register(DBTransaction.class, TransactionDAO.getInstance());
     }
 
-    public Transaction(UUID id, UUID customer_id, UUID location_id, boolean cart, Timestamp modified) {
+    public DBTransaction(UUID id, UUID customer_id, UUID location_id, boolean cart, Timestamp modified) {
         this.id = id;
         this.customer.setKey(customer_id);
         this.location.setKey(location_id);
@@ -30,11 +30,11 @@ public class Transaction extends DBModel {
         return id;
     }
 
-    public ForeignKey<User> getCustomer() {
+    public ForeignKey<DBUser> getCustomer() {
         return customer;
     }
 
-    public ForeignKey<Location> getLocation() {
+    public ForeignKey<DBLocation> getLocation() {
         return location;
     }
 

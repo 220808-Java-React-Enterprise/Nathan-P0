@@ -6,16 +6,16 @@ import com.revature.fff.dao.ForeignKey;
 
 import java.util.UUID;
 
-public class Category extends DBModel {
+public class DBCategory extends DBModel {
     UUID id;
     String name;
-    ForeignKey<Image> image = new ForeignKey<>(Image.class);
+    ForeignKey<DBImage> image = new ForeignKey<>(DBImage.class);
 
     static  {
-        Database.register(Category.class, CategoryDAO.getInstance());
+        Database.register(DBCategory.class, CategoryDAO.getInstance());
     }
 
-    public Category(UUID id, String name, UUID image_id) {
+    public DBCategory(UUID id, String name, UUID image_id) {
         this.id = id;
         this.name = name;
         this.image.setKey(image_id);
@@ -29,7 +29,7 @@ public class Category extends DBModel {
         return name;
     }
 
-    public ForeignKey<Image> getImage() {
+    public ForeignKey<DBImage> getImage() {
         return image;
     }
 

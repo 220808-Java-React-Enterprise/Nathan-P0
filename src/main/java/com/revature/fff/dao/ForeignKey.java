@@ -7,10 +7,15 @@ import java.util.UUID;
 public class ForeignKey<T extends DBModel> {
     Class<? extends DBModel> cls;
     UUID key;
-//    T value;
+    T value;
 
     public ForeignKey(Class<? extends DBModel> cls) {
         this.cls = cls;
+        try {
+            Class.forName(cls.getName());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public ForeignKey(UUID key, Class<? extends DBModel> cls) {

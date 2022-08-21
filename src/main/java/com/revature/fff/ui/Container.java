@@ -16,6 +16,6 @@ public abstract class Container extends Component {
     public void draw(@NotNull Console con) {
         con.setMarginsRelative(bounds);
         for (Component c: components) c.draw(con);
-        con.resetMargins();
+        con.restoreMargins();
     }
 }

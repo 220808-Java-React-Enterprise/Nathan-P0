@@ -6,20 +6,20 @@ import com.revature.fff.dao.LocationDAO;
 
 import java.util.UUID;
 
-public class Location extends DBModel {
+public class DBLocation extends DBModel {
     private UUID id;
     private short number;
     private String address;
     private String city;
     private String state;
     private String zip;
-    private ForeignKey<User> manager = new ForeignKey<>(User.class);
+    private ForeignKey<DBUser> manager = new ForeignKey<>(DBUser.class);
 
     static {
-        Database.register(Location.class, LocationDAO.getInstance());
+        Database.register(DBLocation.class, LocationDAO.getInstance());
     }
 
-    public Location(UUID id, short number, String address, String city, String state, String zip, UUID manager_id) {
+    public DBLocation(UUID id, short number, String address, String city, String state, String zip, UUID manager_id) {
         this.id = id;
         this.number = number;
         this.address = address;
@@ -53,7 +53,7 @@ public class Location extends DBModel {
         return zip;
     }
 
-    public ForeignKey<User> getManager() {
+    public ForeignKey<DBUser> getManager() {
         return manager;
     }
 

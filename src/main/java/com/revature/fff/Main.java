@@ -1,15 +1,8 @@
 package com.revature.fff;
 
-import com.revature.fff.dao.Database;
-import com.revature.fff.dao.UserDAO;
-import com.revature.fff.models.User;
 import com.revature.fff.ui.Console;
 import com.revature.fff.ui.Login;
 import com.revature.fff.ui.ScreenManager;
-import org.postgresql.util.PSQLException;
-
-import java.sql.SQLException;
-import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) {

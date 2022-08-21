@@ -1,12 +1,11 @@
 package com.revature.fff.dao;
 
-import com.revature.fff.models.Image;
-import com.revature.fff.models.Inventory;
+import com.revature.fff.models.DBInventory;
 
 import java.sql.*;
 import java.util.UUID;
 
-public class InventoryDAO extends DAO<Inventory> {
+public class InventoryDAO extends DAO<DBInventory> {
     private static InventoryDAO instance;
     private PreparedStatement insert;
     private PreparedStatement select;
@@ -28,9 +27,9 @@ public class InventoryDAO extends DAO<Inventory> {
     }
 
     @Override
-    public UUID put(Inventory inventory) throws SQLException {
-        insert.setObject(1, inventory.getLocation().get());
-        insert.setObject(2, inventory.getItem().get());
+    public UUID put(DBInventory inventory) throws SQLException {
+        insert.setObject(1, inventory.getLocation().getKey());
+        insert.setObject(2, inventory.getItem().getKey());
         insert.setInt(3, inventory.getQuantity());
         insert.executeUpdate();
         try (ResultSet rs = insert.getGeneratedKeys()) {
@@ -39,16 +38,16 @@ public class InventoryDAO extends DAO<Inventory> {
     }
 
     @Override
-    public Inventory getCurrent(UUID id) {
+    public DBInventory getCurrent(UUID id) {
         try {
             select.setObject(1, id);
             try (ResultSet rs = select.executeQuery()) {
                 return rs.next() ?
-                               new Inventory((UUID) rs.getObject("id"),
-                                             (UUID) rs.getObject("location"),
-                                             (UUID) rs.getObject("item"),
-                                             rs.getInt("quantity"),
-                                             rs.getInt("reserved")) :
+                               new DBInventory((UUID) rs.getObject("id"),
+                                               (UUID) rs.getObject("location"),
+                                               (UUID) rs.getObject("item"),
+                                               rs.getInt("quantity"),
+                                               rs.getInt("reserved")) :
                                null;
             }
         } catch (SQLException e) {
