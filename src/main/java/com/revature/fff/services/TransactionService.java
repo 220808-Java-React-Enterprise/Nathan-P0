@@ -63,4 +63,9 @@ public class TransactionService {
             transaction.setCart(false);
         }
     }
+    
+    public static List<DBTransaction> getTransactionHistory() {
+        DBUser user = UserService.getActiveUser();
+        return TransactionDAO.getInstance().getForUser(user);
+    }
 }

@@ -1,20 +1,25 @@
 package com.revature.fff.dao;
 
+import com.revature.fff.models.DBCategory;
 import com.revature.fff.models.DBLocation;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class LocationDAO extends DAO<DBLocation> {
     private static LocationDAO instance;
     private PreparedStatement insert;
     private PreparedStatement select;
+    private PreparedStatement selectAll;
     private LocationDAO() {
         try {
             Connection conn = Database.getConnection();
             insert = conn.prepareStatement("INSERT INTO locations (number, address, city, state, zip, manager) " +
                                                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             select = conn.prepareStatement("SELECT * FROM locations WHERE id = ?");
+            selectAll = conn.prepareStatement("SELECT * FROM locations");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -53,6 +58,23 @@ public class LocationDAO extends DAO<DBLocation> {
                                               (UUID) rs.getObject("manager")) :
                                null;
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<DBLocation> getAll() {
+        ArrayList<DBLocation> results = new ArrayList<>();
+        try (ResultSet rs = selectAll.executeQuery()) {
+            while(rs.next())
+                results.add(new DBLocation((UUID) rs.getObject("id"),
+                                                  rs.getShort("number"),
+                                                  rs.getString("address"),
+                                                  rs.getString("city"),
+                                                  rs.getString("state"),
+                                                  rs.getString("zip"),
+                                           (UUID) rs.getObject("manager")));
+            return results;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

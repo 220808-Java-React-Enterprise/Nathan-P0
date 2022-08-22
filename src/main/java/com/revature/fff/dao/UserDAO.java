@@ -23,8 +23,8 @@ public class UserDAO extends DAO<DBUser> {
                                                "VALUES (?, ?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             select = conn.prepareStatement("SELECT * FROM users WHERE id = ?");
             selectByAuth = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
-            updateCart = conn.prepareStatement("UPDATE users SET (cart) = (?) WHERE id = ?");
-            updateLocation = conn.prepareStatement("UPDATE users SET (cart) = (?) WHERE id = ?");
+            updateCart = conn.prepareStatement("UPDATE users SET cart=? WHERE id = ?");
+            updateLocation = conn.prepareStatement("UPDATE users SET preferred=? WHERE id = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

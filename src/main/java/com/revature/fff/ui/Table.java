@@ -5,11 +5,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class Table extends Component {
-    int[] widths;
-    int[] splits;
-    String[] headers;
-    ArrayList<String[]> rows = new ArrayList<>(); 
-    int selected = -1;
+    private int[] widths;
+    private int[] splits;
+    private String[] headers;
+    private ArrayList<String[]> rows = new ArrayList<>();
+    private int selected = -1;
+    private IButton rowHandler;
+    
     public Table(int[] widths) {
         this.widths = new int[widths.length];
         headers = new String[widths.length];
@@ -20,6 +22,11 @@ public class Table extends Component {
             splits[i] = split = split + widths[i] + 1;
         }
         setSize(4, splits[splits.length-1]+1);
+    }
+    
+    public Table setHandler(IButton handler) {
+        rowHandler = handler;
+        return this;
     }
     
     public void setHeaders(String[] headers) {
@@ -33,6 +40,9 @@ public class Table extends Component {
             setSize(getHeight()+1, getWidth());
         }
     }
+    
+    public int getSelected() { return selected; }
+    
     @Override
     public void draw(@NotNull Console c) {
         c.setMarginsRelative(bounds);
@@ -83,6 +93,16 @@ public class Table extends Component {
 
     @Override
     public void process(String command) {
-
+        if (command.isEmpty() && rowHandler != null) rowHandler.execute();
+        else for (char c : command.toCharArray()) {
+            if (c == '^') {
+                selected--;
+                if (selected < 0) selected = rows.size() - 1;
+            }
+            else if (c == 'v')  {
+                selected++;
+                if (selected >= rows.size()) selected = 0;
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.revature.fff.services;
 
 import com.revature.fff.dao.UserDAO;
+import com.revature.fff.models.DBLocation;
 import com.revature.fff.models.DBUser;
 
 import java.sql.SQLException;
@@ -37,8 +38,14 @@ public class UserService {
         activeUser = dao.getByUsernameAndPassword(username, password);
         if (activeUser == null) throw new InvalidInput("A user with the given credentials could not be found.");
     }
+    
+    public static void logout() { activeUser = null; }
 
     public static DBUser getActiveUser() {
         return activeUser;
+    }
+    
+    public static void setLocation(DBLocation location) {
+        if (activeUser != null) UserDAO.getInstance().setLocation(activeUser, location);
     }
 }

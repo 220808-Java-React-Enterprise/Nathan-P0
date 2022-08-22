@@ -1,9 +1,13 @@
 package com.revature.fff.dao;
 
+import com.revature.fff.models.DBCategory;
+import com.revature.fff.models.DBItem;
 import com.revature.fff.models.DBTransaction;
 import com.revature.fff.models.DBUser;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class TransactionDAO extends DAO<DBTransaction> {
@@ -11,6 +15,7 @@ public class TransactionDAO extends DAO<DBTransaction> {
     private PreparedStatement insert;
     private PreparedStatement select;
     private PreparedStatement updateCart;
+    private PreparedStatement selectUser;
     private TransactionDAO() {
         try {
             Connection conn = Database.getConnection();
@@ -18,6 +23,7 @@ public class TransactionDAO extends DAO<DBTransaction> {
                                                "VALUES (?, ?, ?, ?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             select = conn.prepareStatement("SELECT * FROM transactions WHERE id = ?");
             updateCart = conn.prepareStatement("UPDATE transactions SET (cart) = (?) WHERE id = ?");
+            selectUser = conn.prepareStatement("SELECT * FROM transactions WHERE customer = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -66,6 +72,24 @@ public class TransactionDAO extends DAO<DBTransaction> {
                 updateCart.setObject(2, transaction.getId());
                 updateCart.executeUpdate();
                 transaction.setCart(false);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<DBTransaction> getForUser(DBUser user) {
+        ArrayList<DBTransaction> results = new ArrayList<>();
+        try {
+            selectUser.setObject(1, user.getId());
+            try (ResultSet rs = selectUser.executeQuery()) {
+                while (rs.next())
+                    results.add(new DBTransaction((UUID) rs.getObject("id"),
+                                                  (UUID) rs.getObject("customer"),
+                                                  (UUID) rs.getObject("location"),
+                                                         rs.getBoolean("cart"),
+                                                         rs.getTimestamp("modified")));
+                return results;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -23,7 +23,7 @@ public class Signup extends Screen {
         submit = new Button(this, "Sign Up", () -> {
             try {
                 UserService.signup(username.getText(), password.getText());
-                sm.setScreen(new Login(sm));
+                sm.setScreen(new SetStore(sm));
             }
             catch(InvalidInput e) {
                 setStatus(e.getMessage());
