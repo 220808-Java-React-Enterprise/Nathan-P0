@@ -1,6 +1,7 @@
 package com.revature.fff.dao;
 
 import com.revature.fff.models.DBTransaction;
+import com.revature.fff.models.DBUser;
 
 import java.sql.*;
 import java.util.UUID;
@@ -9,12 +10,14 @@ public class TransactionDAO extends DAO<DBTransaction> {
     private static TransactionDAO instance;
     private PreparedStatement insert;
     private PreparedStatement select;
+    private PreparedStatement updateCart;
     private TransactionDAO() {
         try {
             Connection conn = Database.getConnection();
             insert = conn.prepareStatement("INSERT INTO transactions (customer, location, cart, modified) " +
                                                "VALUES (?, ?, ?, ?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             select = conn.prepareStatement("SELECT * FROM transactions WHERE id = ?");
+            updateCart = conn.prepareStatement("UPDATE transactions SET (cart) = (?) WHERE id = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -50,6 +53,19 @@ public class TransactionDAO extends DAO<DBTransaction> {
                                                  rs.getBoolean("cart"),
                                                  rs.getTimestamp("modified")) :
                                null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void removeCart(DBTransaction transaction) {
+        try {
+            if (transaction.isCart()) {
+                updateCart.setBoolean(1, false);
+                updateCart.setObject(2, transaction.getId());
+                updateCart.executeUpdate();
+                transaction.setCart(false);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

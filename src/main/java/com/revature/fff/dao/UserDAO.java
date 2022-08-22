@@ -1,5 +1,7 @@
 package com.revature.fff.dao;
 
+import com.revature.fff.models.DBLocation;
+import com.revature.fff.models.DBTransaction;
 import com.revature.fff.models.Role;
 import com.revature.fff.models.DBUser;
 
@@ -11,6 +13,8 @@ public class UserDAO extends DAO<DBUser> {
     PreparedStatement insert;
     PreparedStatement select;
     PreparedStatement selectByAuth;
+    PreparedStatement updateCart;
+    PreparedStatement updateLocation;
 
     private UserDAO() {
         try {
@@ -19,6 +23,8 @@ public class UserDAO extends DAO<DBUser> {
                                                "VALUES (?, ?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             select = conn.prepareStatement("SELECT * FROM users WHERE id = ?");
             selectByAuth = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
+            updateCart = conn.prepareStatement("UPDATE users SET (cart) = (?) WHERE id = ?");
+            updateLocation = conn.prepareStatement("UPDATE users SET (cart) = (?) WHERE id = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -48,6 +54,7 @@ public class UserDAO extends DAO<DBUser> {
                                rs.getString("username"),
                                rs.getString("password"),
                                (UUID) rs.getObject("cart"),
+                               (UUID) rs.getObject("preferred"),
                                Role.valueOf(rs.getString("access"))) :
                     null;
             }
@@ -66,9 +73,32 @@ public class UserDAO extends DAO<DBUser> {
                                rs.getString("username"),
                                rs.getString("password"),
                                (UUID) rs.getObject("cart"),
+                               (UUID) rs.getObject("preferred"),
                                Role.valueOf(rs.getString("access"))) :
                     null;
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public void setCart(DBUser user, DBTransaction cart) {
+        try {
+            updateCart.setObject(1, cart != null ? cart.getId() : null);
+            updateCart.setObject(2, user.getId());
+            updateCart.executeUpdate();
+            user.setCart(cart);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setLocation(DBUser user, DBLocation location) {
+        try {
+            updateLocation.setObject(1, location.getId());
+            updateLocation.setObject(2, user.getId());
+            updateLocation.executeUpdate();
+            user.setPreferred(location);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

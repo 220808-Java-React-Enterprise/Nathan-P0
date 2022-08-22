@@ -8,6 +8,6 @@ import java.util.List;
 
 public class ItemService {
     public static List<DBItem> getItemsForCategory(DBCategory cat) {
-        return ItemDAO.getInstance().getCategory(cat);
+        return ItemDAO.getInstance().getForCategory(cat);
     } 
 }

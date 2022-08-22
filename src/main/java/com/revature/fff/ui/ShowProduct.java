@@ -2,7 +2,9 @@ package com.revature.fff.ui;
 
 import com.revature.fff.models.DBImage;
 import com.revature.fff.models.DBItem;
+import com.revature.fff.models.DBTransaction;
 import com.revature.fff.services.InvalidInput;
+import com.revature.fff.services.TransactionService;
 
 public class ShowProduct extends Screen {
     public ShowProduct(ScreenManager sm, DBItem item) {
@@ -33,12 +35,20 @@ public class ShowProduct extends Screen {
         rightPanel.add(qty);
         addFocusable(qty);
         
-        Button addCart = new Button(this, "Add To Cart", () -> {});
+        Button addCart = new Button(this, "Add To Cart", () -> {
+            DBTransaction transaction = TransactionService.getTransaction(false);
+            TransactionService.addItem(transaction, item, Integer.parseInt(qty.getText()));
+        });
         addCart.setPosition(7, 0);
         rightPanel.add(addCart);
         addFocusable(addCart);
 
-        Button buyNow = new Button(this, "Buy Now", () -> {});
+        Button buyNow = new Button(this, "Buy Now", () -> {
+            DBTransaction transaction = TransactionService.getTransaction(false);
+            TransactionService.addItem(transaction, item, Integer.parseInt(qty.getText()));
+            TransactionService.finalize(transaction);
+            sm.setScreen(new ShowInvoice(sm, transaction, false));
+        });
         buyNow.setPosition(9, 0);
         rightPanel.add(buyNow);
         addFocusable(buyNow);

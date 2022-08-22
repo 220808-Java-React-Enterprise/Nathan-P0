@@ -1,11 +1,7 @@
 package com.revature.fff;
 
-import com.revature.fff.dao.CategoryDAO;
-import com.revature.fff.dao.ImageDAO;
-import com.revature.fff.dao.ItemDAO;
-import com.revature.fff.models.DBCategory;
-import com.revature.fff.models.DBImage;
-import com.revature.fff.models.DBItem;
+import com.revature.fff.dao.*;
+import com.revature.fff.models.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,9 +14,12 @@ import java.util.UUID;
 public class PopulateDatabase {
     static HashMap<String, UUID> images = new HashMap<>();
     static HashMap<String, UUID> categories = new HashMap<>();
+    static HashMap<String, UUID> managers = new HashMap<>();
     public static void main(String[] args) {
         populateCategories();
         populateProducts();
+        populateManagers();
+        populateLocations();
     }
     
     static UUID loadImage(String name) {
@@ -57,7 +56,7 @@ public class PopulateDatabase {
         }
     }
     
-    static void  populateProducts() {
+    static void populateProducts() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("src/main/resources/products.txt"));
             for (String line : lines) {
@@ -65,6 +64,38 @@ public class PopulateDatabase {
                     String[] data = line.split("" + line.charAt(0));
                     ItemDAO.getInstance().put(new DBItem(null, data[1], data[2], loadImage(data[3]),
                                                          Integer.parseInt(data[4]), categories.get(data[5])));
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    static void populateManagers() {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get("src/main/resources/managers.txt"));
+            for (String line : lines) {
+                if (line.length() > 1) {
+                    String[] data = line.split("" + line.charAt(0));
+                    managers.put(data[1], UserDAO.getInstance().put(new DBUser(null, data[1], data[2], null, null, Role.MANAGER)));
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static void populateLocations() {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get("src/main/resources/locations.txt"));
+            for (String line : lines) {
+                if (line.length() > 1) {
+                    String[] data = line.split("" + line.charAt(0));
+                    LocationDAO.getInstance().put(new DBLocation(null, Short.parseShort(data[1]), data[2], data[3], data[4], data[5], managers.get(data[6])));
                 }
             }
         } catch (IOException e) {

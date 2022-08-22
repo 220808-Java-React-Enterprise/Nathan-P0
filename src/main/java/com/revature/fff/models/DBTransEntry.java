@@ -12,7 +12,8 @@ public class DBTransEntry extends DBModel {
     UUID id;
     ForeignKey<DBTransaction> transaction = new ForeignKey<>(DBTransaction.class);
     ForeignKey<DBItem> item = new ForeignKey<>(DBItem.class);
-    int price;
+    int quantity;
+    Price price;
     static final Locale locale = new Locale("en", "US");
     static final NumberFormat nf = NumberFormat.getInstance(locale);
 
@@ -20,11 +21,12 @@ public class DBTransEntry extends DBModel {
         Database.register(DBTransEntry.class, TransEntryDAO.getInstance());
     }
 
-    public DBTransEntry(UUID id, UUID transaction_id, UUID item_id, int price) {
+    public DBTransEntry(UUID id, UUID transaction_id, UUID item_id, int quantity, int price) {
         this.id = id;
         this.transaction.setKey(transaction_id);
         this.item.setKey(item_id);
-        this.price = price;
+        this.quantity = quantity;
+        this.price = new Price(price);
     }
 
     public UUID getId() {
@@ -39,16 +41,21 @@ public class DBTransEntry extends DBModel {
         return item;
     }
 
-    public int getPrice() {
+    public int getQuantity() {
+        return quantity;
+    }
+    
+    public Price getPrice() {
         return price;
     }
-
+    
     @Override
     public String toString() {
         return "TransEntry{" +
                        "id=" + id +
                        ", transaction=" + transaction +
                        ", item=" + item +
+                       ", quantity=" + price +
                        ", price=" + price +
                        '}';
     }

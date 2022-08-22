@@ -45,6 +45,10 @@ public class DBTransaction extends DBModel {
     public Timestamp getModified() {
         return modified;
     }
+    
+    public void setCart(boolean b) {
+        cart = b;
+    }
 
     @Override
     public String toString() {

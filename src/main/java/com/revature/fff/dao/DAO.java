@@ -13,7 +13,10 @@ public abstract class DAO<T> {
 
     public T get(UUID id) {
         T ret = cache.get(id);
-        if (ret == null) return getCurrent(id);
+        if (ret == null) {
+            ret = getCurrent(id);
+            cache.put(id, ret);
+        }
         return ret;
     }
 

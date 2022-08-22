@@ -12,17 +12,19 @@ public class DBUser extends DBModel {
     private String password;
     //FK Transaction.id
     private ForeignKey<DBTransaction> cart = new ForeignKey<>(DBTransaction.class);
+    private ForeignKey<DBLocation> preferred = new ForeignKey<>(DBLocation.class);
     private Role role;
 
     static {
         Database.register(DBUser.class, UserDAO.getInstance());
     }
 
-    public DBUser(UUID id, String username, String password, UUID cart_id, Role role) {
+    public DBUser(UUID id, String username, String password, UUID cart_id, UUID preferred_id, Role role) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.cart.setKey(cart_id);
+        this.preferred.setKey(preferred_id);
         this.role = role;
     }
 
@@ -42,8 +44,20 @@ public class DBUser extends DBModel {
         return cart;
     }
 
+    public ForeignKey<DBLocation> getPreferred() {
+        return preferred;
+    }
+
     public Role getRole() {
         return role;
+    }
+    
+    public void setCart(DBTransaction cart) {
+        this.cart.setKey(cart);
+    }
+
+    public void setPreferred(DBLocation preferred) {
+        this.preferred.setKey(preferred);
     }
 
     @Override
@@ -53,6 +67,7 @@ public class DBUser extends DBModel {
                        ", username='" + username + '\'' +
                        ", password='" + password + '\'' +
                        ", cart=" + cart.getKey() +
+                       ", preferred=" + preferred.getKey() +
                        ", role=" + role +
                        '}';
     }

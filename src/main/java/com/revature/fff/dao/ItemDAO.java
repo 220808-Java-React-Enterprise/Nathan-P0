@@ -37,7 +37,7 @@ public class ItemDAO extends DAO<DBItem> {
         insert.setString(1, item.getName());
         insert.setString(2, item.getDesc());
         insert.setObject(3, item.getImage().getKey());
-        insert.setInt(4, item.getPrice());
+        insert.setInt(4, item.getPrice().value());
         insert.setObject(5, item.getCategory().getKey());
         insert.executeUpdate();
         try (ResultSet rs = insert.getGeneratedKeys()) {
@@ -64,7 +64,7 @@ public class ItemDAO extends DAO<DBItem> {
         }
     }
     
-    public List<DBItem> getCategory(DBCategory cat) {
+    public List<DBItem> getForCategory(DBCategory cat) {
         ArrayList<DBItem> results = new ArrayList<>();
         try {
             selectCat.setObject(1, cat.getId());

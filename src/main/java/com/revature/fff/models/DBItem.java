@@ -13,10 +13,8 @@ public class DBItem extends DBModel {
     String name;
     String desc;
     ForeignKey<DBImage> image = new ForeignKey<>(DBImage.class);
-    int price;
+    Price price;
     ForeignKey<DBCategory> category = new ForeignKey<>(DBCategory.class);
-    static final Locale locale = new Locale("en", "US");
-    static final NumberFormat nf = NumberFormat.getInstance(locale);
 
     static {
         Database.register(DBItem.class, ItemDAO.getInstance());
@@ -27,7 +25,7 @@ public class DBItem extends DBModel {
         this.name = name;
         this.desc = desc;
         this.image.setKey(image_id);
-        this.price = price;
+        this.price = new Price(price);
         this.category.setKey(category_id);
     }
 
@@ -47,11 +45,9 @@ public class DBItem extends DBModel {
         return image;
     }
 
-    public int getPrice() {
-        return price;
-    }
+    public Price getPrice() { return price; }
     
-    public String getDisplayPrice() { return "$" + nf.format(price / 100); }
+    public String getDisplayPrice() { return price.toString(); }
 
     public ForeignKey<DBCategory> getCategory() {
         return category;
@@ -64,7 +60,7 @@ public class DBItem extends DBModel {
                        ", name='" + name + '\'' +
                        ", desc='" + desc + '\'' +
                        ", image=" + image +
-                       ", price=" + getDisplayPrice() +
+                       ", price=" + price +
                        ", category=" + category +
                        '}';
     }

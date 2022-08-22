@@ -23,7 +23,7 @@ public class UserService {
     }
 
     public static void signup(String username, String password) {
-        DBUser user = new DBUser(null, username, password, null, null);
+        DBUser user = new DBUser(null, username, password,null,null,null);
         try {
             dao.put(user);
         } catch (SQLException e) {

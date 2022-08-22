@@ -1,0 +1,2 @@
+:amanager:12345
+:anothermanager:67890
