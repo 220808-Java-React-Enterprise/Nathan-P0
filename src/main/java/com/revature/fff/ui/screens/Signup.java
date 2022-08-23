@@ -1,7 +1,13 @@
-package com.revature.fff.ui;
+package com.revature.fff.ui.screens;
 
 import com.revature.fff.services.InvalidInput;
 import com.revature.fff.services.UserService;
+import com.revature.fff.ui.Console;
+import com.revature.fff.ui.Rectangle;
+import com.revature.fff.ui.ScreenManager;
+import com.revature.fff.ui.components.Button;
+import com.revature.fff.ui.components.FormField;
+import com.revature.fff.ui.components.Frame;
 
 public class Signup extends Screen {
     FormField username, password;
@@ -35,7 +41,7 @@ public class Signup extends Screen {
         int top = (bounds.getHeight() - form.getHeight()) / 2;
         int left = (bounds.getWidth() - form.getWidth()) / 2;
         form.setPosition(top, left);
-        components.add(form);
+        add(form);
         addFocusable(username).addFocusable(password).addFocusable(submit);
     }
 }

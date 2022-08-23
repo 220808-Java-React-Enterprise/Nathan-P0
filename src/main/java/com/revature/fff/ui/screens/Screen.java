@@ -1,14 +1,20 @@
-package com.revature.fff.ui;
+package com.revature.fff.ui.screens;
 
+import com.revature.fff.ui.Console;
+import com.revature.fff.ui.Rectangle;
+import com.revature.fff.ui.ScreenManager;
+import com.revature.fff.ui.components.Component;
+import com.revature.fff.ui.components.Label;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 public class Screen {
 
-    protected ArrayList<Component> components = new ArrayList<>();
-    protected ArrayList<Component> focusable = new ArrayList<>();
-    protected int active;
+    private ArrayList<Component> components = new ArrayList<>();
+    private ArrayList<Component> focusable = new ArrayList<>();
+    private boolean showTabs = false;
+    private int active;
     //This component is a dummy component to avoid returning null
     private Component empty = new Component() {
         @Override
@@ -34,20 +40,23 @@ public class Screen {
         statusbar.setBounds(new Rectangle(con.getMargins().getBottom(), 0, con.getMargins().getRight(), con.getMargins().getBottom()));
     }
 
-    public void preDraw() {}
-
     public void draw() {
         Console con = Console.getInstance();
-        preDraw();
+        con.resetMargins();
         for (Component c : components) {
             c.draw(con);
         }
-        postDraw();
+        if (showTabs) {
+            int index = 0;
+            for (Component c : focusable) {
+                con.setPosition(c.getTop(), c.getLeft());
+                con.print(++index + " ");
+            }
+        }
+        con.restoreMargins();
         titlebar.draw(con);
         statusbar.draw(con);
     }
-
-    public void postDraw() {}
 
     public void processInput(String input) {
         getActive().process(input);
@@ -77,16 +86,22 @@ public class Screen {
         return empty;
     }
 
-    protected void layout() {
-    }
-
     public void setStatus(String text) {
         statusbar.setText(text);
     }
 
+    public Screen add(Component c) {
+        components.add(c);
+        return this;
+    }
+    
     public Screen addFocusable(Component c) {
         if (focusable.size() == active) c.setActive(true);
         focusable.add(c);
         return this;
+    }
+    
+    public void toggleTabs() {
+        showTabs = !showTabs;
     }
 }

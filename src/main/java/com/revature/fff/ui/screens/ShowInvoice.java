@@ -1,34 +1,19 @@
-package com.revature.fff.ui;
+package com.revature.fff.ui.screens;
 
-import com.revature.fff.models.DBItem;
 import com.revature.fff.models.DBTransEntry;
 import com.revature.fff.models.DBTransaction;
 import com.revature.fff.models.Price;
 import com.revature.fff.services.TransactionService;
+import com.revature.fff.ui.ScreenManager;
+import com.revature.fff.ui.components.Button;
+import com.revature.fff.ui.components.Label;
+import com.revature.fff.ui.components.Table;
 
 import java.util.List;
 
 public class ShowInvoice extends Screen {
     public ShowInvoice(ScreenManager sm, DBTransaction transaction, boolean buy) {
         super(sm);
-        if(buy) {
-            Label msg = new Label("Viewing cart");
-            msg.setPosition(2, 5);
-            components.add(msg);
-            Button purchase = new Button(this, "Purchase", () -> {
-                List<DBTransEntry> nostock = TransactionService.finalize(transaction);
-                if (nostock == null) sm.setScreen(new ShowInvoice(sm, transaction, false));
-                else sm.setScreen(new ShowNoStock(sm, transaction, nostock));
-            } );
-            purchase.setPosition(2, 40);
-            components.add(purchase);
-            addFocusable(purchase);
-        }
-        else {
-            Label thanks = new Label("Thank you for your purchase!");
-            thanks.setPosition(2, 5);
-            components.add(thanks);
-        }
         
         int total = 0;
         Table itemTable = new Table(new int[]{42, 9, 3, 9});
@@ -44,29 +29,51 @@ public class ShowInvoice extends Screen {
             total += t;
         }
         itemTable.setPosition(6, 5);
-        components.add(itemTable);
-        addFocusable(itemTable);
+        add(itemTable);
         itemTable.setHandler(() -> {
             if (itemTable.getSelected() >= 0) {
                 DBTransEntry entry = entries.get(itemTable.getSelected());
                 sm.setScreen(new ShowProduct(sm, null, entry.getItem().get(), false));
             }
         });
-        
+
+        if(buy) {
+            Label msg = new Label("Viewing cart");
+            msg.setPosition(2, 5);
+            add(msg);
+            Button purchase = new Button(this, "Purchase", () -> {
+                if (!entries.isEmpty()) {
+                    List<DBTransEntry> nostock = TransactionService.finalize(transaction);
+                    if (nostock == null) sm.setScreen(new ShowInvoice(sm, transaction, false));
+                    else sm.setScreen(new ShowNoStock(sm, transaction, nostock));
+                }
+                else setStatus("Your cart is empty.");
+            } );
+            purchase.setPosition(2, 40);
+            add(purchase);
+            addFocusable(purchase);
+        }
+        else {
+            Label thanks = new Label("Thank you for your purchase!");
+            thanks.setPosition(2, 5);
+            add(thanks);
+        }
+        addFocusable(itemTable);
+
         Label customer = new Label("Customer: " + transaction.getCustomer().get().getUsername());
         customer.setPosition(3, 5);
-        components.add(customer);
+        add(customer);
         
         Label id = new Label("Invoice: " + transaction.getId().toString().substring(0, 8));
         id.setPosition(3, 40);
-        components.add(id);
+        add(id);
         
         Label location = new Label("Location: " + String.format("%04d", transaction.getLocation().get().getNumber()));
         location.setPosition(4, 5);
-        components.add(location);
+        add(location);
         
         Label price = new Label("Total: " + new Price(total));
         price.setPosition(4, 40);
-        components.add(price);
+        add(price);
     }
 }

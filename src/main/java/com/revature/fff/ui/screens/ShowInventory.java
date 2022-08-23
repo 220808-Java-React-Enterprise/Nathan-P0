@@ -1,11 +1,11 @@
-package com.revature.fff.ui;
+package com.revature.fff.ui.screens;
 
 import com.revature.fff.models.DBInventory;
 import com.revature.fff.models.DBLocation;
-import com.revature.fff.models.DBUser;
 import com.revature.fff.services.ItemService;
-import com.revature.fff.services.LocationService;
-import com.revature.fff.services.UserService;
+import com.revature.fff.ui.ScreenManager;
+import com.revature.fff.ui.components.Label;
+import com.revature.fff.ui.components.Table;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class ShowInventory extends Screen {
         super(sm);
         Label title = new Label("Showing inventory for Store: " + location.getFormattedNumber());
         title.setPosition(2, 5);
-        components.add(title);
+        add(title);
 
         Table inventory = new Table(new int[]{40, 3});
         inventory.setHeaders(new String[]{"Product Name", "Qty"});
@@ -23,7 +23,7 @@ public class ShowInventory extends Screen {
             inventory.addRow(new String[]{entry.getItem().get().getName(), "" + entry.getQuantity()});
         }
         inventory.setPosition(6, 5);
-        components.add(inventory);
+        add(inventory);
         addFocusable(inventory);
         inventory.setHandler(() -> {
             if (inventory.getSelected() >= 0) {

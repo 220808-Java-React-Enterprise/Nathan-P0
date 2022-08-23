@@ -3,6 +3,7 @@ package com.revature.fff.ui;
 import com.revature.fff.models.DBTransaction;
 import com.revature.fff.models.DBUser;
 import com.revature.fff.services.UserService;
+import com.revature.fff.ui.screens.*;
 
 public class ScreenManager implements Runnable {
     Screen current = null;
@@ -21,6 +22,7 @@ public class ScreenManager implements Runnable {
                         if (c == '.') current.processInput("");
                         else if (c == '>') current.nextComp();
                         else if (c == '<') current.prevComp();
+                        else if (c == 't') current.toggleTabs();
                         else if (c == 'h') setScreen(new ShowHistory(this));
                         else if (c == 'm') setScreen(new MainMenu(this));
                         else if (c == 'l') {

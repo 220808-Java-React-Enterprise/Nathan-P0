@@ -1,9 +1,11 @@
-package com.revature.fff.ui;
+package com.revature.fff.ui.screens;
 
 import com.revature.fff.models.*;
 import com.revature.fff.services.InvalidInput;
 import com.revature.fff.services.ItemService;
 import com.revature.fff.services.TransactionService;
+import com.revature.fff.ui.ScreenManager;
+import com.revature.fff.ui.components.*;
 
 import java.util.List;
 
@@ -14,12 +16,12 @@ public class ShowProduct extends Screen {
         Image image = new Image(imageData != null ? imageData.getData() : null, () -> {
         });
         image.setPosition(3, 5);
-        components.add(image);
+        add(image);
 
         Frame rightPanel = new Frame();
         rightPanel.setPosition(5, 40);
         rightPanel.setSize(10, 35);
-        components.add(rightPanel);
+        add(rightPanel);
 
         Label name = new Label(item.getName());
         name.setPosition(0, 0);
@@ -76,9 +78,9 @@ public class ShowProduct extends Screen {
 
         Label desc0 = new Label("Description:");
         desc0.setPosition(17, 5);
-        components.add(desc0);
+        add(desc0);
         Label desc = new Label(item.getDesc());
         desc.setPosition(18, 5);
-        components.add(desc);
+        add(desc);
     }
 }

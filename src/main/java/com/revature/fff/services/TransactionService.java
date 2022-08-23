@@ -18,7 +18,7 @@ public class TransactionService {
         try {
             DBUser user = UserService.getActiveUser();
             if (user == null) return null;
-            if (user.getPreferred().getKey() == null) throw new InvalidInput("No store set!");
+            if (user.getPreferred().getKey() == null) throw new NoStore("No store set!");
             DBTransaction transaction;
             if (cart) {
                 UUID cart_id = user.getCart().getKey();

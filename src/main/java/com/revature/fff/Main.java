@@ -1,7 +1,7 @@
 package com.revature.fff;
 
 import com.revature.fff.ui.Console;
-import com.revature.fff.ui.Login;
+import com.revature.fff.ui.screens.Login;
 import com.revature.fff.ui.ScreenManager;
 
 public class Main {

@@ -1,5 +1,6 @@
-package com.revature.fff.ui;
+package com.revature.fff.ui.components;
 
+import com.revature.fff.ui.Console;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;

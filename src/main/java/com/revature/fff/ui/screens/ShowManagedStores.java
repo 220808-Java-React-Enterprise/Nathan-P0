@@ -1,9 +1,12 @@
-package com.revature.fff.ui;
+package com.revature.fff.ui.screens;
 
 import com.revature.fff.models.DBLocation;
 import com.revature.fff.models.DBUser;
 import com.revature.fff.services.LocationService;
 import com.revature.fff.services.UserService;
+import com.revature.fff.ui.ScreenManager;
+import com.revature.fff.ui.components.Label;
+import com.revature.fff.ui.components.Table;
 
 import java.util.List;
 
@@ -13,7 +16,7 @@ public class ShowManagedStores extends Screen {
         super(sm);
         Label select = new Label("Select a store");
         select.setPosition(2, 5);
-        components.add(select);
+        add(select);
 
         Table locations = new Table(new int[]{4, 20, 20, 2, 5, 10});
         locations.setHeaders(new String[]{"No.", "Street", "City", "St", "Zip", "Manager"});
@@ -24,7 +27,7 @@ public class ShowManagedStores extends Screen {
                     entry.getState(), entry.getZip(), manager != null ? manager.getUsername() : "<None>"});
         }
         locations.setPosition(4, 5);
-        components.add(locations);
+        add(locations);
         addFocusable(locations);
         locations.setHandler(() -> {
             if (locations.getSelected() >= 0)

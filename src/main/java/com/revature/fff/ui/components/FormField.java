@@ -1,6 +1,9 @@
-package com.revature.fff.ui;
+package com.revature.fff.ui.components;
 
 import com.revature.fff.services.InvalidInput;
+import com.revature.fff.ui.Console;
+import com.revature.fff.ui.IAction;
+import com.revature.fff.ui.screens.Screen;
 import org.jetbrains.annotations.NotNull;
 
 public class FormField extends Component {

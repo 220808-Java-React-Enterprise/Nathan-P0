@@ -1,5 +1,7 @@
-package com.revature.fff.ui;
+package com.revature.fff.ui.components;
 
+import com.revature.fff.ui.Console;
+import com.revature.fff.ui.IButton;
 import org.jetbrains.annotations.NotNull;
 
 public class Image extends Frame {

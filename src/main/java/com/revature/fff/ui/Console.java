@@ -60,18 +60,18 @@ public class Console {
     }
 
     //region Margins
-    public void setMargins(Rectangle bounds, int cr) {
-        setMargins(bounds.getTop(), bounds.getLeft(), bounds.getBottom(), bounds.getRight(), cr);
+    public void setMargins(Rectangle bounds) {
+        setMargins(bounds.getTop(), bounds.getLeft(), bounds.getBottom(), bounds.getRight());
     }
 
     public void setMarginsRelative(Rectangle bounds) {
         Rectangle r = bounds.clone();
         r.move(r.getTop() + mTop, r.getLeft() + mLeft);
         r.intersect(margins.peek());
-        setMargins(r.getTop(), r.getLeft(), r.getBottom(), r.getRight(), mCR - margins.peek().getLeft());
+        setMargins(r.getTop(), r.getLeft(), r.getBottom(), r.getRight());
     }
 
-    public void setMargins(int t, int l, int b, int r, int cr) {
+    public void setMargins(int t, int l, int b, int r) {
         margins.push(new Rectangle(
                 t < 0 ? 0 : t,
                 l < 0 ? 0 : l,
@@ -79,11 +79,10 @@ public class Console {
                 r >= width ? width - 1 : r
         ));
         updateCachedMargins();
-        setMarginReturn(cr);
     }
 
     public void resetMargins() {
-        setMargins(0, 0, height - 1, width - 1, 0);
+        setMargins(0, 0, height - 1, width - 1);
     }
 
     public boolean restoreMargins() {

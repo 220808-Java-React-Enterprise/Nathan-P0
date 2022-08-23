@@ -1,11 +1,14 @@
-package com.revature.fff.ui;
+package com.revature.fff.ui.screens;
 
 import com.revature.fff.models.DBTransEntry;
 import com.revature.fff.models.DBTransaction;
 import com.revature.fff.models.Price;
 import com.revature.fff.services.TransactionService;
+import com.revature.fff.ui.ScreenManager;
+import com.revature.fff.ui.components.Button;
+import com.revature.fff.ui.components.Label;
+import com.revature.fff.ui.components.Table;
 
-import java.util.Collection;
 import java.util.List;
 
 public class ShowNoStock extends Screen {
@@ -13,10 +16,10 @@ public class ShowNoStock extends Screen {
         super(sm);
         Label msg = new Label("The following items are out of stock :(");
         msg.setPosition(2, 5);
-        components.add(msg);
+        add(msg);
         Label msg2 = new Label("Remove items from order or Cancel order?");
         msg2.setPosition(3, 5);
-        components.add(msg2);
+        add(msg2);
 
         Button remove = new Button(this, "Remove", () -> {
             TransactionService.removeItems(entries);
@@ -25,14 +28,15 @@ public class ShowNoStock extends Screen {
             else sm.setScreen(new ShowNoStock(sm, transaction, nostock));
         } );
         remove.setPosition(5, 5);
-        components.add(remove);
+        add(remove);
         addFocusable(remove);
 
         Button cancel = new Button(this, "Cancel", () -> {
             TransactionService.cancel(transaction);
+            sm.setScreen(new MainMenu(sm));
         } );
         cancel.setPosition(5, 15);
-        components.add(cancel);
+        add(cancel);
         addFocusable(cancel);
 
         int total = 0;
@@ -48,7 +52,7 @@ public class ShowNoStock extends Screen {
             total += t;
         }
         itemTable.setPosition(7, 5);
-        components.add(itemTable);
+        add(itemTable);
         itemTable.setHandler(() -> {
             if (itemTable.getSelected() >= 0) {
                 DBTransEntry entry = entries.get(itemTable.getSelected());

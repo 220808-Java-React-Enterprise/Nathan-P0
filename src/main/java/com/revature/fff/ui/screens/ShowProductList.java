@@ -1,8 +1,10 @@
-package com.revature.fff.ui;
+package com.revature.fff.ui.screens;
 
 import com.revature.fff.models.*;
 import com.revature.fff.services.ItemService;
 import com.revature.fff.services.UserService;
+import com.revature.fff.ui.ScreenManager;
+import com.revature.fff.ui.components.Button;
 
 import java.util.List;
 
@@ -20,10 +22,10 @@ public class ShowProductList extends Screen {
             int row = 3;
             for (DBInventory inv : items) {
                 DBItem item = inv.getItem().get();
-                Button b = new Button(this, item.getName() + " " + item.getDisplayPrice(), 
+                Button b = new Button(this, item.getName() + " " + item.getDisplayPrice(),
                                       () -> { sm.setScreen(new ShowProduct(sm, inv, item,false)); });
                 b.setPosition(row, 5);
-                components.add(b);
+                add(b);
                 addFocusable(b);
                 row++;
                 if (row > 22) break;

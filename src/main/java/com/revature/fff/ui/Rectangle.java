@@ -4,10 +4,10 @@ public class Rectangle {
     protected int top, bottom;
     protected int left, right;
 
-    Rectangle() {
+    public Rectangle() {
     }
 
-    Rectangle(int t, int l, int b, int r) {
+    public Rectangle(int t, int l, int b, int r) {
         setBounds(t, l, b, r);
     }
 

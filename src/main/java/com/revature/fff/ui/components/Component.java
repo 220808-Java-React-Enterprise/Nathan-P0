@@ -1,5 +1,8 @@
-package com.revature.fff.ui;
+package com.revature.fff.ui.components;
 
+import com.revature.fff.ui.Console;
+import com.revature.fff.ui.IAction;
+import com.revature.fff.ui.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Component implements IAction {
@@ -7,7 +10,7 @@ public abstract class Component implements IAction {
     protected boolean active;
     protected Object extra;
 
-    Component() {
+    protected Component() {
         bounds = new Rectangle();
     }
 
