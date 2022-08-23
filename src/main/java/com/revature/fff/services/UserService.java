@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class UserService {
     private static DBUser activeUser;
-    private static UserDAO dao = UserDAO.getInstance();
+
     public static void checkUsername(String username) throws InvalidInput {
         if (username.length() < 4) throw new InvalidInput("Username must be at least 4 characters.");
         if (username.length() > 20) throw new InvalidInput("Username must be at most 20 characters.");
@@ -26,18 +26,21 @@ public class UserService {
     public static void signup(String username, String password) {
         DBUser user = new DBUser(null, username, password,null,null,null);
         try {
-            UUID id = dao.put(user);
+            checkUsername(username);
+            checkPassword(password);
+            UUID id = UserDAO.getInstance().put(user);
             activeUser = UserDAO.getInstance().get(id);
         } catch (SQLException e) {
             if (e.getSQLState().equals("23505"))
-                throw new InvalidInput("That username has already been taken. Please choose another.");
+                throw new UserExists("That username has already been taken. Please choose another.");
             throw new RuntimeException(e);
         }
     }
 
     public static void login(String username, String password) {
+        UserDAO dao = UserDAO.getInstance();
         activeUser = dao.getByUsernameAndPassword(username, password);
-        if (activeUser == null) throw new InvalidInput("A user with the given credentials could not be found.");
+        if (activeUser == null) throw new UserNotFound("A user with the given credentials could not be found.");
     }
     
     public static void logout() { activeUser = null; }
