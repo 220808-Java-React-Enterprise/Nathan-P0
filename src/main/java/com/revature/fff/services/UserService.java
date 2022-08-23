@@ -38,8 +38,7 @@ public class UserService {
     }
 
     public static void login(String username, String password) {
-        UserDAO dao = UserDAO.getInstance();
-        activeUser = dao.getByUsernameAndPassword(username, password);
+        activeUser = UserDAO.getInstance().getByUsernameAndPassword(username, password);
         if (activeUser == null) throw new UserNotFound("A user with the given credentials could not be found.");
     }
     

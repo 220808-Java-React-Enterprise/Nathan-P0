@@ -1,5 +1,7 @@
 package com.revature.fff.ui;
 
+import com.revature.fff.models.DBTransaction;
+import com.revature.fff.models.DBUser;
 import com.revature.fff.services.UserService;
 
 public class ScreenManager implements Runnable {
@@ -24,6 +26,17 @@ public class ScreenManager implements Runnable {
                         else if (c == 'l') {
                             UserService.logout();
                             setScreen(new Login(this));
+                            break;
+                        }
+                        else if (c == 'c') {
+                            DBUser user = UserService.getActiveUser();
+                            if (user == null) {
+                                setScreen(new Login(this));
+                                break;
+                            }
+                            DBTransaction cart = user.getCart().get();
+                            if (cart != null) setScreen(new ShowInvoice(this, cart, true));
+                            break;
                         }
                     }
                 }

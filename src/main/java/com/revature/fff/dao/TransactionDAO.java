@@ -1,9 +1,6 @@
 package com.revature.fff.dao;
 
-import com.revature.fff.models.DBCategory;
-import com.revature.fff.models.DBItem;
-import com.revature.fff.models.DBTransaction;
-import com.revature.fff.models.DBUser;
+import com.revature.fff.models.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,14 +13,16 @@ public class TransactionDAO extends DAO<DBTransaction> {
     private PreparedStatement select;
     private PreparedStatement updateCart;
     private PreparedStatement selectUser;
+    private PreparedStatement remove;
     private TransactionDAO() {
         try {
             Connection conn = Database.getConnection();
             insert = conn.prepareStatement("INSERT INTO transactions (customer, location, cart, modified) " +
                                                "VALUES (?, ?, ?, ?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             select = conn.prepareStatement("SELECT * FROM transactions WHERE id = ?");
-            updateCart = conn.prepareStatement("UPDATE transactions SET (cart) = (?) WHERE id = ?");
+            updateCart = conn.prepareStatement("UPDATE transactions SET cart = ? WHERE id = ?");
             selectUser = conn.prepareStatement("SELECT * FROM transactions WHERE customer = ?");
+            remove = conn.prepareStatement("DELETE * FROM transactions WHERE id = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -91,6 +90,15 @@ public class TransactionDAO extends DAO<DBTransaction> {
                                                          rs.getTimestamp("modified")));
                 return results;
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void remove(DBTransaction transaction) {
+        try {
+            remove.setObject(1, transaction.getId());
+            remove.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

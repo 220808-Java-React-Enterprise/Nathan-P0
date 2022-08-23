@@ -26,15 +26,17 @@ public class ForeignKey<T extends DBModel> {
     public void setKey(UUID key) {
         this.key = key;
     }
-    
-    public void setKey(T t) { this.key = t.getId(); }
+
+    public void setKey(T t) {
+        this.key = (t == null ? null : t.getId());
+    }
 
     public UUID getKey() {
         return key;
     }
 
     public T get() {
-        if (key != null) return  (T) Database.getForType(cls).get(key);
+        if (key != null) return (T) Database.getForType(cls).get(key);
         return null;
     }
 }

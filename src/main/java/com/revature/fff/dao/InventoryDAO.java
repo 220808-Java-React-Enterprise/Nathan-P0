@@ -16,6 +16,7 @@ public class InventoryDAO extends DAO<DBInventory> {
     private PreparedStatement select;
     private PreparedStatement selectLocation;
     private PreparedStatement selectCatLocation;
+    private PreparedStatement selectLocationItem;
     private PreparedStatement update;
     private InventoryDAO() {
         try {
@@ -27,7 +28,8 @@ public class InventoryDAO extends DAO<DBInventory> {
                                                        "WHERE location = ? ORDER BY items.name");
             selectCatLocation = conn.prepareStatement("SELECT * FROM inventory JOIN items ON items.id = item " + 
                                                           "WHERE location = ? AND items.category = ? ORDER BY items.name");
-            update = conn.prepareStatement("UPDATE inventory SET quantity=? WHERE id = ?");
+            selectLocationItem = conn.prepareStatement("SELECT * FROM inventory WHERE location = ? AND item = ?");
+            update = conn.prepareStatement("UPDATE inventory SET quantity=?, reserved=0 WHERE id = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -61,6 +63,24 @@ public class InventoryDAO extends DAO<DBInventory> {
                                                (UUID) rs.getObject("item"),
                                                rs.getInt("quantity"),
                                                rs.getInt("reserved")) :
+                               null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public DBInventory get(DBLocation location, DBItem item) {
+        try {
+            selectLocationItem.setObject(1, location.getId());
+            selectLocationItem.setObject(2, item.getId());
+            try (ResultSet rs = selectLocationItem.executeQuery()) {
+                return rs.next() ?
+                               new DBInventory((UUID) rs.getObject("id"),
+                                               (UUID) rs.getObject("location"),
+                                               (UUID) rs.getObject("item"),
+                                                      rs.getInt("quantity"),
+                                                      rs.getInt("reserved")) :
                                null;
             }
         } catch (SQLException e) {
@@ -114,6 +134,5 @@ public class InventoryDAO extends DAO<DBInventory> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 }

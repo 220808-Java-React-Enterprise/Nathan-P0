@@ -44,6 +44,10 @@ public class DBInventory extends DBModel {
     public int getReserved() {
         return reserved;
     }
+    
+    public void setReserved(int r) { reserved = r; }
+    
+    public void addReserved(int r) { reserved += r; }
 
     @Override
     public String toString() {

@@ -20,10 +20,10 @@ public class ShowManagedStores extends Screen {
         List<DBLocation> entries = LocationService.getLocationsForManager(UserService.getActiveUser());
         for (DBLocation entry : entries) {
             DBUser manager = entry.getManager().get();
-            locations.addRow(new String[]{"" + entry.getNumber(), entry.getAddress(), entry.getCity(), entry.getState(),
-                    entry.getZip(), manager != null ? manager.getUsername() : "<None>"});
+            locations.addRow(new String[]{"" + entry.getFormattedNumber(), entry.getAddress(), entry.getCity(),
+                    entry.getState(), entry.getZip(), manager != null ? manager.getUsername() : "<None>"});
         }
-        locations.setPosition(6, 5);
+        locations.setPosition(4, 5);
         components.add(locations);
         addFocusable(locations);
         locations.setHandler(() -> {

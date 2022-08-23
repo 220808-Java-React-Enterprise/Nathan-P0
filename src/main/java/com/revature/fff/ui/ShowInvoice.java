@@ -11,7 +11,20 @@ import java.util.List;
 public class ShowInvoice extends Screen {
     public ShowInvoice(ScreenManager sm, DBTransaction transaction, boolean buy) {
         super(sm);
-        if (!buy) {
+        if(buy) {
+            Label msg = new Label("Viewing cart");
+            msg.setPosition(2, 5);
+            components.add(msg);
+            Button purchase = new Button(this, "Purchase", () -> {
+                List<DBTransEntry> nostock = TransactionService.finalize(transaction);
+                if (nostock == null) sm.setScreen(new ShowInvoice(sm, transaction, false));
+                else sm.setScreen(new ShowNoStock(sm, transaction, nostock));
+            } );
+            purchase.setPosition(2, 40);
+            components.add(purchase);
+            addFocusable(purchase);
+        }
+        else {
             Label thanks = new Label("Thank you for your purchase!");
             thanks.setPosition(2, 5);
             components.add(thanks);

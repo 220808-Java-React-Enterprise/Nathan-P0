@@ -14,6 +14,7 @@ public class TransEntryDAO extends DAO<DBTransEntry> {
     private PreparedStatement insert;
     private PreparedStatement select;
     private PreparedStatement selectTransaction;
+    private PreparedStatement remove;
     private TransEntryDAO() {
         try {
             Connection conn = Database.getConnection();
@@ -21,7 +22,7 @@ public class TransEntryDAO extends DAO<DBTransEntry> {
                                                    "VALUES (?, ?, ?, ?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             select = conn.prepareStatement("SELECT * FROM transentries WHERE id = ?");
             selectTransaction = conn.prepareStatement("SELECT * FROM transentries WHERE transaction = ?");
-
+            remove = conn.prepareStatement("DELETE FROM transentries WHERE id = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -76,6 +77,15 @@ public class TransEntryDAO extends DAO<DBTransEntry> {
                                                         rs.getInt("price")));
                 return results;
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void remove(DBTransEntry transEntry) {
+        try {
+            remove.setObject(1, transEntry.getId());
+            remove.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
