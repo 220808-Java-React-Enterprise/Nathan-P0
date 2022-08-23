@@ -2,6 +2,7 @@ package com.revature.fff.dao;
 
 import com.revature.fff.models.DBCategory;
 import com.revature.fff.models.DBLocation;
+import com.revature.fff.models.DBUser;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class LocationDAO extends DAO<DBLocation> {
     private PreparedStatement insert;
     private PreparedStatement select;
     private PreparedStatement selectAll;
+    private PreparedStatement selectUser;
     private LocationDAO() {
         try {
             Connection conn = Database.getConnection();
@@ -20,6 +22,7 @@ public class LocationDAO extends DAO<DBLocation> {
                                                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             select = conn.prepareStatement("SELECT * FROM locations WHERE id = ?");
             selectAll = conn.prepareStatement("SELECT * FROM locations");
+            selectUser = conn.prepareStatement("SELECT * FROM locations WHERE manager = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -75,6 +78,26 @@ public class LocationDAO extends DAO<DBLocation> {
                                                   rs.getString("zip"),
                                            (UUID) rs.getObject("manager")));
             return results;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<DBLocation> getForManager(DBUser manager) {
+        ArrayList<DBLocation> results = new ArrayList<>();
+        try {
+            selectUser.setObject(1, manager.getId());
+            try (ResultSet rs = selectAll.executeQuery()) {
+                while (rs.next())
+                    results.add(new DBLocation((UUID) rs.getObject("id"),
+                                                      rs.getShort("number"),
+                                                      rs.getString("address"),
+                                                      rs.getString("city"),
+                                                      rs.getString("state"),
+                                                      rs.getString("zip"),
+                                               (UUID) rs.getObject("manager")));
+                return results;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

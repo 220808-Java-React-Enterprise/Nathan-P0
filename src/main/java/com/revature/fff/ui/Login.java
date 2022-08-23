@@ -10,14 +10,10 @@ public class Login extends Screen {
         super(sm);
         Frame form = new Frame().setTitle("Login").setBorder(true);
         form.setSize(10, 24);
-        FormField username = new FormField(this, "Username").setMax(20).setValidator((s) -> {
-            UserService.checkUsername(s);
-        });
+        FormField username = new FormField(this, "Username").setMax(20);
         username.setPosition(1, 1);
         form.add(username);
-        FormField password = new FormField(this, "Password").setMax(20).setValidator((s) -> {
-            UserService.checkPassword(s);
-        });
+        FormField password = new FormField(this, "Password").setMax(20);
         password.setPosition(4, 1);
         form.add(password);
         Button submit = new Button(this, "Login", () -> {

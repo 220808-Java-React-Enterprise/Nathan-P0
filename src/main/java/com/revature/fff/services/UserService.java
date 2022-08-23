@@ -5,6 +5,7 @@ import com.revature.fff.models.DBLocation;
 import com.revature.fff.models.DBUser;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class UserService {
     private static DBUser activeUser;
@@ -17,16 +18,16 @@ public class UserService {
     }
 
     public static void checkPassword(String password) throws InvalidInput {
-//        if(!password.matches("/^[a-zA-Z0-9_-]{4,16}$/"))
-//            throw new InvalidInput("Username must be 4 to 16 characters and only include letters, numbers, '_' and
-//            '-'");
+        if (password.length() < 8) throw new InvalidInput("Password must be at least 8 characters.");
+        if (password.length() > 20) throw new InvalidInput("Password must be at most 20 characters.");
         return;
     }
 
     public static void signup(String username, String password) {
         DBUser user = new DBUser(null, username, password,null,null,null);
         try {
-            dao.put(user);
+            UUID id = dao.put(user);
+            activeUser = UserDAO.getInstance().get(id);
         } catch (SQLException e) {
             if (e.getSQLState().equals("23505"))
                 throw new InvalidInput("That username has already been taken. Please choose another.");

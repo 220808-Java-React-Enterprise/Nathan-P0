@@ -19,8 +19,8 @@ public class UserDAO extends DAO<DBUser> {
     private UserDAO() {
         try {
             Connection conn = Database.getConnection();
-            insert = conn.prepareStatement("INSERT INTO users (username, password) " +
-                                               "VALUES (?, ?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
+            insert = conn.prepareStatement("INSERT INTO users (username, password, access) " +
+                                               "VALUES (?, ?, ?::role) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             select = conn.prepareStatement("SELECT * FROM users WHERE id = ?");
             selectByAuth = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
             updateCart = conn.prepareStatement("UPDATE users SET cart=? WHERE id = ?");
@@ -39,6 +39,7 @@ public class UserDAO extends DAO<DBUser> {
     public UUID put(DBUser user) throws SQLException {
         insert.setString(1, user.getUsername());
         insert.setString(2, user.getPassword());
+        insert.setString(3, user.getRole().toString());
         insert.executeUpdate();
         try (ResultSet rs = insert.getGeneratedKeys()) {
             return rs.next() ? (UUID) rs.getObject("id") : null;

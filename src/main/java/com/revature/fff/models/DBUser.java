@@ -25,7 +25,7 @@ public class DBUser extends DBModel {
         this.password = password;
         this.cart.setKey(cart_id);
         this.preferred.setKey(preferred_id);
-        this.role = role;
+        this.role = role == null ? Role.USER : role;
     }
 
     public UUID getId() {

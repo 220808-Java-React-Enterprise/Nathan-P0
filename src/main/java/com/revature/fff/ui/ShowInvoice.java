@@ -34,8 +34,10 @@ public class ShowInvoice extends Screen {
         components.add(itemTable);
         addFocusable(itemTable);
         itemTable.setHandler(() -> {
-            if (itemTable.getSelected() >= 0)
-                sm.setScreen(new ShowProduct(sm, entries.get(itemTable.getSelected()).getItem().get()));
+            if (itemTable.getSelected() >= 0) {
+                DBTransEntry entry = entries.get(itemTable.getSelected());
+                sm.setScreen(new ShowProduct(sm, null, entry.getItem().get(), false));
+            }
         });
         
         Label customer = new Label("Customer: " + transaction.getCustomer().get().getUsername());

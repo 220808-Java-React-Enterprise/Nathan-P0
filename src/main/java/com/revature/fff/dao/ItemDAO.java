@@ -2,6 +2,7 @@ package com.revature.fff.dao;
 
 import com.revature.fff.models.DBCategory;
 import com.revature.fff.models.DBItem;
+import com.revature.fff.models.DBLocation;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class ItemDAO extends DAO<DBItem> {
     private PreparedStatement insert;
     private PreparedStatement select;
     private PreparedStatement selectCat;
-
+    
     private ItemDAO() {
         try {
             Connection conn = Database.getConnection();

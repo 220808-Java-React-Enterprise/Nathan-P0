@@ -36,6 +36,10 @@ public class DBLocation extends DBModel {
     public short getNumber() {
         return number;
     }
+    
+    public String getFormattedNumber() {
+        return String.format("%04d", number);
+    }
 
     public String getAddress() {
         return address;

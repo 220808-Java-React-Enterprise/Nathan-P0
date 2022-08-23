@@ -1,10 +1,7 @@
 package com.revature.fff.ui;
 
 import com.revature.fff.dao.CategoryDAO;
-import com.revature.fff.models.DBCategory;
-import com.revature.fff.models.DBImage;
-import com.revature.fff.models.DBLocation;
-import com.revature.fff.models.DBUser;
+import com.revature.fff.models.*;
 import com.revature.fff.services.UserService;
 
 import java.util.List;
@@ -13,7 +10,10 @@ public class MainMenu extends Screen {
     public MainMenu(ScreenManager sm) {
         super(sm);
         DBUser user = UserService.getActiveUser();
-        if (user == null) sm.setScreen(new Login(sm));
+        if (user == null) {
+            sm.setScreen(new Login(sm));
+            return;
+        }
         DBLocation location = user.getPreferred().get();
         Label welcome = new Label("Welcome " + user.getUsername() + " (Preferred store: " +
                                           (location != null ? String.format("%04d", location.getNumber()) : "<None>") +")");
@@ -45,5 +45,16 @@ public class MainMenu extends Screen {
         history.setPosition(6, 50);
         components.add(history);
         addFocusable(history);
+        
+        if (user.getRole().equals(Role.MANAGER)) {
+            Label managerControls = new Label("Manager Controls");
+            managerControls.setPosition(8, 50);
+            components.add(managerControls);
+            
+            Button viewStores = new Button(this, "View Stores", () -> { sm.setScreen(new ShowManagedStores(sm)); } );
+            viewStores.setPosition(10, 50);
+            components.add(viewStores);
+            addFocusable(viewStores);
+        }
     }
 }

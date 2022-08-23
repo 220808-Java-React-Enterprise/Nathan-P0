@@ -1,8 +1,8 @@
 package com.revature.fff.ui;
 
-import com.revature.fff.models.DBCategory;
-import com.revature.fff.models.DBItem;
+import com.revature.fff.models.*;
 import com.revature.fff.services.ItemService;
+import com.revature.fff.services.UserService;
 
 import java.util.List;
 
@@ -11,13 +11,17 @@ public class ShowProductList extends Screen {
     public ShowProductList(ScreenManager sm, DBCategory cat) {
         super(sm);
         category = cat;
-        List<DBItem> items;
+        List<DBInventory> items;
+        DBUser user = UserService.getActiveUser();
+        DBLocation location = user.getPreferred().get();
+        if (location == null) sm.setScreen(new SetStore(sm));
         if (category != null) {
-            items = ItemService.getItemsForCategory(category);
+            items = ItemService.getInventoryForCategory(category, location);
             int row = 3;
-            for (DBItem item : items) {
+            for (DBInventory inv : items) {
+                DBItem item = inv.getItem().get();
                 Button b = new Button(this, item.getName() + " " + item.getDisplayPrice(), 
-                                      () -> { sm.setScreen(new ShowProduct(sm, item)); });
+                                      () -> { sm.setScreen(new ShowProduct(sm, inv, item,false)); });
                 b.setPosition(row, 5);
                 components.add(b);
                 addFocusable(b);

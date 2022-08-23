@@ -1,20 +1,33 @@
 package com.revature.fff.dao;
 
+import com.revature.fff.models.DBCategory;
 import com.revature.fff.models.DBInventory;
+import com.revature.fff.models.DBItem;
+import com.revature.fff.models.DBLocation;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class InventoryDAO extends DAO<DBInventory> {
     private static InventoryDAO instance;
     private PreparedStatement insert;
     private PreparedStatement select;
+    private PreparedStatement selectLocation;
+    private PreparedStatement selectCatLocation;
+    private PreparedStatement update;
     private InventoryDAO() {
         try {
             Connection conn = Database.getConnection();
             insert = conn.prepareStatement("INSERT INTO inventory (location, item, quantity) " +
                                                "VALUES (?, ?, ?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             select = conn.prepareStatement("SELECT * FROM inventory WHERE id = ?");
+            selectLocation = conn.prepareStatement("SELECT * FROM inventory JOIN items ON items.id = item " + 
+                                                       "WHERE location = ? ORDER BY items.name");
+            selectCatLocation = conn.prepareStatement("SELECT * FROM inventory JOIN items ON items.id = item " + 
+                                                          "WHERE location = ? AND items.category = ? ORDER BY items.name");
+            update = conn.prepareStatement("UPDATE inventory SET quantity=? WHERE id = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -53,5 +66,54 @@ public class InventoryDAO extends DAO<DBInventory> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<DBInventory> getForLocation(DBLocation location) {
+        ArrayList<DBInventory> results = new ArrayList<>();
+        try {
+            selectLocation.setObject(1, location.getId());
+            try (ResultSet rs = selectLocation.executeQuery()) {
+                while (rs.next())
+                    results.add(new DBInventory((UUID) rs.getObject("id"),
+                                                (UUID) rs.getObject("location"),
+                                                (UUID) rs.getObject("item"),
+                                                       rs.getInt("quantity"),
+                                                       rs.getInt("reserved")));
+                return results;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<DBInventory> getForCategoryAndLocation(DBCategory category, DBLocation location) {
+        ArrayList<DBInventory> results = new ArrayList<>();
+        try {
+            selectCatLocation.setObject(1, location.getId());
+            selectCatLocation.setObject(2, category.getId());
+            try (ResultSet rs = selectCatLocation.executeQuery()) {
+                while (rs.next())
+                    results.add(new DBInventory((UUID) rs.getObject("id"),
+                                                (UUID) rs.getObject("location"),
+                                                (UUID) rs.getObject("item"),
+                                                rs.getInt("quantity"),
+                                                rs.getInt("reserved")));
+                return results;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public void update(DBInventory inventory, int quantity) {
+        try {
+            update.setInt(1, quantity);
+            update.setObject(2, inventory.getId());
+            update.executeUpdate();
+            cache.remove(inventory.getId());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
