@@ -68,7 +68,7 @@ public class ShowInvoice extends Screen {
         id.setPosition(3, 40);
         add(id);
         
-        Label location = new Label("Location: " + String.format("%04d", transaction.getLocation().get().getNumber()));
+        Label location = new Label("Location: " + transaction.getLocation().get().getFormattedNumber());
         location.setPosition(4, 5);
         add(location);
         

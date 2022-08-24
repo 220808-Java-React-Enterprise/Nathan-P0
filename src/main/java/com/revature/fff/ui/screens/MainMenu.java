@@ -20,7 +20,7 @@ public class MainMenu extends Screen {
         }
         DBLocation location = user.getPreferred().get();
         Label welcome = new Label("Welcome " + user.getUsername() + " (Preferred store: " +
-                                          (location != null ? String.format("%04d", location.getNumber()) : "<None>") +")");
+                                          (location != null ? location.getFormattedNumber() : "<None>") +")");
         welcome.setPosition(1,1);
         add(welcome);
         List<DBCategory> categories = CategoryDAO.getInstance().getAll();

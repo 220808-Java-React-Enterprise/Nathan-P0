@@ -27,14 +27,13 @@ public class ShowHistory extends Screen {
         List<DBTransaction> entries = TransactionService.getTransactionHistory();
         for (DBTransaction entry : entries) {
             history.addRow(new String[]{entry.getId().toString().substring(0, 8),
-                    String.format("%04d", entry.getLocation().get().getNumber()),
-                    entry.getModified().toString()});
+                    entry.getLocation().get().getFormattedNumber(), entry.getModified().toString()});
         }
         history.setPosition(6, 5);
         add(history);
         addFocusable(history);
         history.setHandler(() -> {
-            if (history.getSelected() >= 0) 
+            if (history.getSelected() >= 0)
                 sm.setScreen(new ShowInvoice(sm, entries.get(history.getSelected()), false));
         });
     }

@@ -18,12 +18,12 @@ public class SetStore extends Screen {
         select.setPosition(2, 5);
         add(select);
 
-        Table locations = new Table(new int[]{4, 20, 20, 2, 5, 10});
+        Table locations = new Table(new int[]{4, 15, 15, 2, 5, 20});
         locations.setHeaders(new String[]{"No.", "Street", "City", "St", "Zip", "Manager"});
         List<DBLocation> entries = LocationService.getLocations();
         for (DBLocation entry : entries) {
             DBUser manager = entry.getManager().get();
-            locations.addRow(new String[]{"" + entry.getNumber(), entry.getAddress(), entry.getCity(), entry.getState(),
+            locations.addRow(new String[]{entry.getFormattedNumber(), entry.getAddress(), entry.getCity(), entry.getState(),
                                           entry.getZip(), manager != null ? manager.getUsername() : "<None>"});
         }
         locations.setPosition(6, 5);

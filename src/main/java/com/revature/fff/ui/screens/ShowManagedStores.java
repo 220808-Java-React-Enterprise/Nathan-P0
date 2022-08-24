@@ -18,7 +18,7 @@ public class ShowManagedStores extends Screen {
         select.setPosition(2, 5);
         add(select);
 
-        Table locations = new Table(new int[]{4, 20, 20, 2, 5, 10});
+        Table locations = new Table(new int[]{4, 15, 15, 2, 5, 20});
         locations.setHeaders(new String[]{"No.", "Street", "City", "St", "Zip", "Manager"});
         List<DBLocation> entries = LocationService.getLocationsForManager(UserService.getActiveUser());
         for (DBLocation entry : entries) {

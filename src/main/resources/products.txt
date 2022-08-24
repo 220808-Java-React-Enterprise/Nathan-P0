@@ -1,4 +1,10 @@
-:Chair 1:A Chair:empty:10000:Chairs
-:Chair 2:Another Chair:empty:20000:Chairs
-:Chair 3:A Stool:empty:5000:Chairs
-:Chair 4:A Couch and Loveseat Set:empty:100000:Chairs
+:Chair 1:A Chair:chair1:10000:Chairs
+:Chair 2:Chair With Arms:chair2:20000:Chairs
+:Chair 3:A Stool:chair3:5000:Chairs
+:Chair 4:A Couch and Love Seat Set:empty:100000:Chairs
+:Table 1:Kitchen Table:table1:60000:Tables
+:Table 2:Small End Table:table2:30000:Tables
+:Bookshelf 1:Short Bookshelf:shelf1:30000:Bookshelves
+:Bookshelf 2:Tall Bookshelf:shelf2:50000:Bookshelves
+:Dresser 1:Short Dresser:dresser1:35000:Dressers
+:Dresser 2:Tall Dresser:dresser2:55000:Dressers

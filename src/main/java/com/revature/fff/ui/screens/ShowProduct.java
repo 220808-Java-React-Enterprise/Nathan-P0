@@ -48,7 +48,7 @@ public class ShowProduct extends Screen {
             editQty.setPosition(7, 0);
             rightPanel.add(editQty);
             addFocusable(editQty);
-        } else {
+        } else if (inv != null) {
             Button addCart = new Button(this, "Add To Cart", () -> {
                 DBTransaction transaction = TransactionService.getTransaction(true);
                 TransactionService.addItem(transaction, item, Integer.parseInt(qty.getText()));

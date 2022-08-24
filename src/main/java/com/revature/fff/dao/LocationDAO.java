@@ -53,11 +53,11 @@ public class LocationDAO extends DAO<DBLocation> {
             try (ResultSet rs = select.executeQuery()) {
                 return rs.next() ?
                                new DBLocation((UUID) rs.getObject("id"),
-                                              rs.getShort("number"),
-                                              rs.getString("address"),
-                                              rs.getString("city"),
-                                              rs.getString("state"),
-                                              rs.getString("zip"),
+                                                     rs.getShort("number"),
+                                                     rs.getString("address"),
+                                                     rs.getString("city"),
+                                                     rs.getString("state"),
+                                                     rs.getString("zip"),
                                               (UUID) rs.getObject("manager")) :
                                null;
             }
@@ -87,7 +87,7 @@ public class LocationDAO extends DAO<DBLocation> {
         ArrayList<DBLocation> results = new ArrayList<>();
         try {
             selectUser.setObject(1, manager.getId());
-            try (ResultSet rs = selectAll.executeQuery()) {
+            try (ResultSet rs = selectUser.executeQuery()) {
                 while (rs.next())
                     results.add(new DBLocation((UUID) rs.getObject("id"),
                                                       rs.getShort("number"),
