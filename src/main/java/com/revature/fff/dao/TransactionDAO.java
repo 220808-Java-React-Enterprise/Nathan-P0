@@ -21,7 +21,7 @@ public class TransactionDAO extends DAO<DBTransaction> {
                                                "VALUES (?, ?, ?, ?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             select = conn.prepareStatement("SELECT * FROM transactions WHERE id = ?");
             updateCart = conn.prepareStatement("UPDATE transactions SET cart = ? WHERE id = ?");
-            selectUser = conn.prepareStatement("SELECT * FROM transactions WHERE customer = ?");
+            selectUser = conn.prepareStatement("SELECT * FROM transactions WHERE customer = ? ORDER BY modified DESC");
             remove = conn.prepareStatement("DELETE * FROM transactions WHERE id = ?");
         } catch (SQLException e) {
             throw new RuntimeException(e);

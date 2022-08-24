@@ -21,8 +21,8 @@ public class LocationDAO extends DAO<DBLocation> {
             insert = conn.prepareStatement("INSERT INTO locations (number, address, city, state, zip, manager) " +
                                                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING id", Statement.RETURN_GENERATED_KEYS);
             select = conn.prepareStatement("SELECT * FROM locations WHERE id = ?");
-            selectAll = conn.prepareStatement("SELECT * FROM locations");
-            selectUser = conn.prepareStatement("SELECT * FROM locations WHERE manager = ?");
+            selectAll = conn.prepareStatement("SELECT * FROM locations ORDER BY number");
+            selectUser = conn.prepareStatement("SELECT * FROM locations WHERE manager = ? ORDER BY number");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
